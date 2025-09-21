@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float globalMaxY;
     [SerializeField] float globalMinX;
     [SerializeField] float globalMinY;
-    [SerializeField] float speed = 1f;
+    //[SerializeField] float speed = 1f;
 
     void Update()
     {
