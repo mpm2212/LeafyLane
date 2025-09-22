@@ -1,5 +1,7 @@
 using UnityEngine;
 
+    // code adapted from the video module on canvas
+
 public class CameraController : MonoBehaviour
 {
     [SerializeField] GameObject target;
@@ -11,7 +13,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        // code adapted from the video module on canvas
         Vector3 goal = target.transform.position + new Vector3(0, 0, -10);
 
         Vector3 newPosition = goal;
@@ -28,7 +29,7 @@ public class CameraController : MonoBehaviour
 
     }
 
-    
+
 
     void OnDrawGizmos()
     {
