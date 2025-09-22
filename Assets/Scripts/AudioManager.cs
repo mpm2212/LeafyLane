@@ -21,16 +21,6 @@ public class AudioManager : MonoBehaviour
         ApplyVolumes();
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     void AudioManagerSingleton()
     {
         if (Instance != null && Instance != this)
@@ -54,7 +44,7 @@ public class AudioManager : MonoBehaviour
         sfxSource.volume = sfxVolume;
     }
 
-    void PlaySFX(AudioClip clip)
+    public void PlaySFX(AudioClip clip)
     {
         if (clip == null) return;
         sfxSource.PlayOneShot(clip, sfxVolume);

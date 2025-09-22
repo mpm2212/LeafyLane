@@ -8,12 +8,16 @@ public class PlayerVisuals : MonoBehaviour
     SpriteRenderer spriteRenderer;
     float intx;
     [SerializeField] bool isHolding = false;
+    [SerializeField] GameObject walkingTrail;
+    ParticleSystem walkingTrailSystem;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         playerRB = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        walkingTrailSystem = walkingTrail.GetComponent<ParticleSystem>();
+
     }
 
     void Update()
@@ -27,7 +31,13 @@ public class PlayerVisuals : MonoBehaviour
     void FlipWalkingAnimation()
     {
         if (playerRB.linearVelocityX == 0) { return; }
-        if (playerRB.linearVelocityX < 0.01) { spriteRenderer.flipX = true; }
-        else if (playerRB.linearVelocityX > 0.01) { spriteRenderer.flipX = false; }
+        if (playerRB.linearVelocityX < 0.01) { spriteRenderer.flipX = true; walkingTrail.transform.localScale = new Vector3(-1, -1, -1); }
+        else if (playerRB.linearVelocityX > 0.01) { spriteRenderer.flipX = false; walkingTrail.transform.localScale = new Vector3(1, 1, 1); }
     }
+
+    void PlayWalkingTrail()
+    {
+        walkingTrailSystem.Play();
+    }
+    
 }
