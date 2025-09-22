@@ -4,17 +4,24 @@ public class PickUpController : MonoBehaviour
 {
 
     [SerializeField] private float checkRange = 1f;
-
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
 
     public float radius = 0.4f;
     private GameObject itemHolding;
     private Vector3 direction;
+    private PlayerMovement.WalkingDirection facingDirection;
+    private PlayerMovement player;
+    private Vector3 offset = new Vector3(0,0,0);
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        player = GetComponentInParent<PlayerMovement>();
+        if (player == null)
+        {
+            Debug.LogError("PlayerMovement not found in parent!");
+        }
 
     }
 
@@ -28,7 +35,7 @@ public class PickUpController : MonoBehaviour
                 checkAllDirections();
             }
         }
-        
+        facingDirection = player.facingDir;
     }
 
     private void checkAllDirections()
@@ -61,8 +68,22 @@ public class PickUpController : MonoBehaviour
     }
 
     private void putDownObject(){
-        Debug.Log("Placing Down Object");
-        itemHolding.transform.position = transform.position + direction; 
+        switch(facingDirection){
+            case PlayerMovement.WalkingDirection.Up:
+                offset = new Vector3(0,1,0);
+                break;
+            case PlayerMovement.WalkingDirection.Down: 
+                offset = new Vector3(0,-1,0);
+                break;
+            case PlayerMovement.WalkingDirection.Right:
+                offset = new Vector3(1,0,0);
+                break;
+            case PlayerMovement.WalkingDirection.Left:
+                offset = new Vector3(-1,0,0);
+                break;
+        }
+        
+        itemHolding.transform.position = transform.position + offset; 
         itemHolding.transform.parent = null;
         if(itemHolding.GetComponent<Rigidbody2D>())
         {
@@ -70,6 +91,4 @@ public class PickUpController : MonoBehaviour
         }
         itemHolding = null;
     }
-
-    //make another
 }
