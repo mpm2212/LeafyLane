@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Rigidbody2D playerRB;
+    private Rigidbody2D playerRB;
     [SerializeField] float speed;
     [SerializeField] int maxSpeed;
     [SerializeField] float acceleration;
@@ -11,6 +11,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] KeyCode rightKey;
     [SerializeField] KeyCode upKey;
     [SerializeField] KeyCode downKey;
+
+    public enum WalkingDirection
+    {
+        Up, 
+        Down,
+        Left, 
+        Right
+    };
+
+    public WalkingDirection facingDir {get; private set;}
 
 
     void Start()
