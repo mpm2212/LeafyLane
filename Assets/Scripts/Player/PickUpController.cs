@@ -38,10 +38,10 @@ public class PickUpController : MonoBehaviour
         }
         facingDirection = player.facingDir;
         
-        Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
-        Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
-        Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
-        Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
     }
 
     private void checkAllDirections()
