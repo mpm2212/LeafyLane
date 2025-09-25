@@ -6,6 +6,7 @@ public class PickUpController : MonoBehaviour
     [SerializeField] private float checkRange = 5f;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
+    Animator animator;
 
     public float radius = 0.4f;
     private GameObject itemHolding;
@@ -18,6 +19,8 @@ public class PickUpController : MonoBehaviour
     void Start()
     {
         player = GetComponentInParent<PlayerMovement>();
+        animator = GetComponent<Animator>();
+
         if (player == null)
         {
             Debug.LogError("PlayerMovement not found in parent!");
@@ -71,35 +74,43 @@ public class PickUpController : MonoBehaviour
             itemHolding = hit.collider.gameObject;
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
-            if(itemHolding.GetComponent<Rigidbody2D>()){
+            if (itemHolding.GetComponent<Rigidbody2D>())
+            {
                 itemHolding.GetComponent<Rigidbody2D>().simulated = false;
             }
+            animator.SetBool("isHolding", true);
+            Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
         }
         
     }
 
-    private void putDownObject(){
-        switch(facingDirection){
+    private void putDownObject()
+    {
+        switch (facingDirection)
+        {
             case PlayerMovement.WalkingDirection.Up:
-                offset = new Vector3(0,1,0);
+                offset = new Vector3(0, 1, 0);
                 break;
-            case PlayerMovement.WalkingDirection.Down: 
-                offset = new Vector3(0,-1,0);
+            case PlayerMovement.WalkingDirection.Down:
+                offset = new Vector3(0, -1, 0);
                 break;
             case PlayerMovement.WalkingDirection.Right:
-                offset = new Vector3(1,0,0);
+                offset = new Vector3(1, 0, 0);
                 break;
             case PlayerMovement.WalkingDirection.Left:
-                offset = new Vector3(-1,0,0);
+                offset = new Vector3(-1, 0, 0);
                 break;
         }
-        
-        itemHolding.transform.position = transform.position + offset; 
+
+        itemHolding.transform.position = transform.position + offset;
         itemHolding.transform.parent = null;
-        if(itemHolding.GetComponent<Rigidbody2D>())
+        if (itemHolding.GetComponent<Rigidbody2D>())
         {
             itemHolding.GetComponent<Rigidbody2D>().simulated = true;
         }
         itemHolding = null;
+        animator.SetBool("isHolding", false);
+        Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
+
     }
 }

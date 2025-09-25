@@ -23,7 +23,7 @@ public class PlayerVisuals : MonoBehaviour
     void Update()
     {
         animator.SetFloat("MovementMomentum", playerRB.linearVelocity.magnitude);
-        animator.SetBool("isHolding", isHolding);
+        //animator.SetBool("isHolding", isHolding);
 
         FlipWalkingAnimation();
     }
