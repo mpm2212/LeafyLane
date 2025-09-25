@@ -1,5 +1,7 @@
 using UnityEngine;
 
+    // code adapted from the video module on canvas
+
 public class CameraController : MonoBehaviour
 {
     [SerializeField] GameObject target;
@@ -7,19 +9,13 @@ public class CameraController : MonoBehaviour
     [SerializeField] float globalMaxY;
     [SerializeField] float globalMinX;
     [SerializeField] float globalMinY;
-    [SerializeField] float speed = 1f;
-
-    void Start()
-    {
-        //Camera.main.orthographicSize = .5f;
-    }
+    //[SerializeField] float speed = 1f;
 
     void Update()
     {
-        // code adapted from the video module on canvas
         Vector3 goal = target.transform.position + new Vector3(0, 0, -10);
 
-        Vector3 newPosition = Vector3.Lerp(transform.position, goal, Time.deltaTime * speed);
+        Vector3 newPosition = goal;
 
         float maxY = globalMaxY - Camera.main.orthographicSize;
         float maxX = globalMaxX - Camera.main.orthographicSize * Camera.main.aspect;
@@ -33,7 +29,7 @@ public class CameraController : MonoBehaviour
 
     }
 
-    
+
 
     void OnDrawGizmos()
     {

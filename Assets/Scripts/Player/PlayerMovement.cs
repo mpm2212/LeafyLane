@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Rigidbody2D playerRB;
+    private Rigidbody2D playerRB;
     [SerializeField] float speed;
     [SerializeField] int maxSpeed;
     [SerializeField] float acceleration;
@@ -12,6 +12,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] KeyCode upKey;
     [SerializeField] KeyCode downKey;
 
+    public enum WalkingDirection
+    {
+        Up, 
+        Down,
+        Left, 
+        Right
+    };
+
+    public WalkingDirection facingDir {get; private set;}
 
     void Start()
     {
@@ -22,54 +31,38 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRB.linearVelocity = new Vector2(0, 0);
 
-        if (Input.GetKey(leftKey))
-        {
-            moveX(-speed);
+        if (Input.GetKey(leftKey)) 
+        { 
+            moveX(-speed); 
+            facingDir = WalkingDirection.Left;}
+        if (Input.GetKey(rightKey)) 
+        { 
+            moveX(speed); 
+            facingDir = WalkingDirection.Right;
         }
-
-        if (Input.GetKey(rightKey))
-        {
-            moveX(speed);
+        if (Input.GetKey(upKey)) 
+        { 
+            moveY(speed); 
+            facingDir = WalkingDirection.Up;
         }
-        if (Input.GetKey(upKey))
-        {
-            moveY(speed);
-        }
-        if (Input.GetKey(downKey))
-        {
-            moveY(-speed);
+        if (Input.GetKey(downKey)) 
+        { 
+            moveY(-speed); 
+            facingDir = WalkingDirection.Down;
         }
     }
 
-    void moveX(float velocity)
-    {
-        playerRB.linearVelocityX += velocity;
-    }
+    void moveX(float velocity) { playerRB.linearVelocityX += velocity; }
 
-    void moveY(float velocity)
-    {
-        playerRB.linearVelocityY += velocity; 
-    }
+    void moveY(float velocity) { playerRB.linearVelocityY += velocity; }
 
-    public KeyCode getLeftKey()
-    {
-        return leftKey;
-    }
+    public KeyCode getLeftKey() { return leftKey; }
 
-    public KeyCode getRightKey()
-    {
-        return rightKey;
-    }
+    public KeyCode getRightKey() { return rightKey; }
 
-    public KeyCode getUpKey()
-    {
-        return upKey;
-    }
+    public KeyCode getUpKey() { return upKey; }
 
-    public KeyCode getDownKey()
-    {
-        return downKey;
-    }
+    public KeyCode getDownKey() { return downKey; }
 
 }
 
