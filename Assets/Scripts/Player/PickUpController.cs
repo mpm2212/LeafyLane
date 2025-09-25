@@ -38,19 +38,19 @@ public class PickUpController : MonoBehaviour
         }
         facingDirection = player.facingDir;
         
-        Debug.DrawLine(transform.position, Vector3.up, Color.red);
-        Debug.DrawLine(transform.position, Vector3.down, Color.red);
-        Debug.DrawLine(transform.position, Vector3.left, Color.red);
-        Debug.DrawLine(transform.position, Vector3.right, Color.red);
+        Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
+        Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
+        Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
+        Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
     }
 
     private void checkAllDirections()
     {
         Debug.Log("CheckingAllDirections");
-        RaycastHit2D up = Physics2D.Raycast(transform.position, Vector2.up, checkRange, pickupMask);
-        RaycastHit2D down = Physics2D.Raycast(transform.position, Vector2.down, checkRange, pickupMask);
-        RaycastHit2D right = Physics2D.Raycast(transform.position, Vector2.right, checkRange, pickupMask);
-        RaycastHit2D left = Physics2D.Raycast(transform.position, Vector2.left, checkRange, pickupMask);
+        RaycastHit2D up = Physics2D.Raycast(transform.position, Vector3.up + transform.position, checkRange, pickupMask);
+        RaycastHit2D down = Physics2D.Raycast(transform.position, Vector3.down + transform.position, checkRange, pickupMask);
+        RaycastHit2D right = Physics2D.Raycast(transform.position, Vector3.right + transform.position, checkRange, pickupMask);
+        RaycastHit2D left = Physics2D.Raycast(transform.position, Vector3.left + transform.position, checkRange, pickupMask);
 
 
 
