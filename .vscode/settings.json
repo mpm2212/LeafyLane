@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "LeafyLaneRepository.sln"
+    "dotnet.defaultSolution": "LeafyLane.sln"
 }
