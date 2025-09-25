@@ -15,7 +15,6 @@ public class PickUpController : MonoBehaviour
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponentInParent<PlayerMovement>();
@@ -27,8 +26,6 @@ public class PickUpController : MonoBehaviour
         }
 
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -39,17 +36,11 @@ public class PickUpController : MonoBehaviour
             }
             else { checkAllDirections(); }
         }
-        facingDirection = player.facingDir;
-        
-        // Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
+        facingDirection = player.facingDirection;
     }
 
     private void checkAllDirections()
     {
-        Debug.Log("CheckingAllDirections");
         RaycastHit2D up = Physics2D.Raycast(transform.position, Vector3.up + transform.position, checkRange, pickupMask);
         RaycastHit2D down = Physics2D.Raycast(transform.position, Vector3.down + transform.position, checkRange, pickupMask);
         RaycastHit2D right = Physics2D.Raycast(transform.position, Vector3.right + transform.position, checkRange, pickupMask);
@@ -58,11 +49,9 @@ public class PickUpController : MonoBehaviour
 
 
         RaycastHit2D[] hits = new RaycastHit2D[] {up, down, right, left};
-        Debug.Log("hits: " + hits);
         foreach (RaycastHit2D hit in hits)
         {
             pickUpItem(hit);
-            Debug.Log("ran pickUpItem: " + hit);
         }
     }
 
@@ -79,7 +68,6 @@ public class PickUpController : MonoBehaviour
                 itemHolding.GetComponent<Rigidbody2D>().simulated = false;
             }
             animator.SetBool("isHolding", true);
-            Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
         }
         
     }
@@ -110,7 +98,5 @@ public class PickUpController : MonoBehaviour
         }
         itemHolding = null;
         animator.SetBool("isHolding", false);
-        Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
-
     }
 }

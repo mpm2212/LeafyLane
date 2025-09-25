@@ -11,16 +11,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] KeyCode rightKey;
     [SerializeField] KeyCode upKey;
     [SerializeField] KeyCode downKey;
+    Vector3 movement = new Vector3 (0, 0, 0);
 
     public enum WalkingDirection
     {
-        Up, 
+        Up,
         Down,
-        Left, 
+        Left,
         Right
     };
 
-    public WalkingDirection facingDir {get; private set;}
+    public WalkingDirection facingDirection {get; private set;}
 
     void Start()
     {
@@ -34,21 +35,21 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(leftKey)) 
         { 
             moveX(-speed); 
-            facingDir = WalkingDirection.Left;}
+            facingDirection = WalkingDirection.Left;}
         if (Input.GetKey(rightKey)) 
         { 
             moveX(speed); 
-            facingDir = WalkingDirection.Right;
+            facingDirection = WalkingDirection.Right;
         }
         if (Input.GetKey(upKey)) 
         { 
             moveY(speed); 
-            facingDir = WalkingDirection.Up;
+            facingDirection = WalkingDirection.Up;
         }
         if (Input.GetKey(downKey)) 
         { 
             moveY(-speed); 
-            facingDir = WalkingDirection.Down;
+            facingDirection = WalkingDirection.Down;
         }
     }
 
