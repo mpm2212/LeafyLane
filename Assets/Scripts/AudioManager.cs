@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 // code from Singleton Audio Manager exercise in Canvas
