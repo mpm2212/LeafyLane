@@ -22,7 +22,6 @@ public class PlayerMovement : MonoBehaviour
 
     public WalkingDirection facingDir {get; private set;}
 
-
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
