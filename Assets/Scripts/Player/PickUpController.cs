@@ -27,15 +27,21 @@ public class PickUpController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
-        if(Input.GetKeyDown(KeyCode.LeftShift)){
-            if(itemHolding){
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if (itemHolding)
+            {
                 putDownObject();
-            }else{
-                checkAllDirections();
             }
+            else { checkAllDirections(); }
         }
         facingDirection = player.facingDir;
+        
+        Debug.DrawLine(transform.position, Vector3.up, Color.red);
+        Debug.DrawLine(transform.position, Vector3.down, Color.red);
+        Debug.DrawLine(transform.position, Vector3.left, Color.red);
+        Debug.DrawLine(transform.position, Vector3.right, Color.red);
     }
 
     private void checkAllDirections()
@@ -46,9 +52,14 @@ public class PickUpController : MonoBehaviour
         RaycastHit2D right = Physics2D.Raycast(transform.position, Vector2.right, checkRange, pickupMask);
         RaycastHit2D left = Physics2D.Raycast(transform.position, Vector2.left, checkRange, pickupMask);
 
+
+
         RaycastHit2D[] hits = new RaycastHit2D[] {up, down, right, left};
-        foreach (RaycastHit2D hit in hits){
+        Debug.Log("hits: " + hits);
+        foreach (RaycastHit2D hit in hits)
+        {
             pickUpItem(hit);
+            Debug.Log("ran pickUpItem: " + hit);
         }
     }
 
