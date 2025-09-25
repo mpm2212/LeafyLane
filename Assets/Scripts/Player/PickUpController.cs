@@ -3,7 +3,7 @@ using UnityEngine;
 public class PickUpController : MonoBehaviour
 {
 
-    [SerializeField] private float checkRange = 1f;
+    [SerializeField] private float checkRange = 5f;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
 

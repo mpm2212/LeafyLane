@@ -32,10 +32,25 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRB.linearVelocity = new Vector2(0, 0);
 
-        if (Input.GetKey(leftKey)) { moveX(-speed); }
-        if (Input.GetKey(rightKey)) { moveX(speed); }
-        if (Input.GetKey(upKey)) { moveY(speed); }
-        if (Input.GetKey(downKey)) { moveY(-speed); }
+        if (Input.GetKey(leftKey)) 
+        { 
+            moveX(-speed); 
+            facingDir = WalkingDirection.Left;}
+        if (Input.GetKey(rightKey)) 
+        { 
+            moveX(speed); 
+            facingDir = WalkingDirection.Right;
+        }
+        if (Input.GetKey(upKey)) 
+        { 
+            moveY(speed); 
+            facingDir = WalkingDirection.Up;
+        }
+        if (Input.GetKey(downKey)) 
+        { 
+            moveY(-speed); 
+            facingDir = WalkingDirection.Down;
+        }
     }
 
     void moveX(float velocity) { playerRB.linearVelocityX += velocity; }
