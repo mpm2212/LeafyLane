@@ -32,58 +32,23 @@ public class PlayerMovement : MonoBehaviour
     {
         playerRB.linearVelocity = new Vector2(0, 0);
 
-        if (Input.GetKey(leftKey))
-        {
-            moveX(-speed);
-            facingDir = WalkingDirection.Left;
-        }
-
-        if (Input.GetKey(rightKey))
-        {
-            moveX(speed);
-            facingDir = WalkingDirection.Right;
-        }
-        if (Input.GetKey(upKey))
-        {
-            moveY(speed);
-            facingDir = WalkingDirection.Up;
-        }
-        if (Input.GetKey(downKey))
-        {
-            moveY(-speed);
-            facingDir = WalkingDirection.Left;
-        }
+        if (Input.GetKey(leftKey)) { moveX(-speed); }
+        if (Input.GetKey(rightKey)) { moveX(speed); }
+        if (Input.GetKey(upKey)) { moveY(speed); }
+        if (Input.GetKey(downKey)) { moveY(-speed); }
     }
 
-    void moveX(float velocity)
-    {
-        playerRB.linearVelocityX += velocity;
-    }
+    void moveX(float velocity) { playerRB.linearVelocityX += velocity; }
 
-    void moveY(float velocity)
-    {
-        playerRB.linearVelocityY += velocity; 
-    }
+    void moveY(float velocity) { playerRB.linearVelocityY += velocity; }
 
-    public KeyCode getLeftKey()
-    {
-        return leftKey;
-    }
+    public KeyCode getLeftKey() { return leftKey; }
 
-    public KeyCode getRightKey()
-    {
-        return rightKey;
-    }
+    public KeyCode getRightKey() { return rightKey; }
 
-    public KeyCode getUpKey()
-    {
-        return upKey;
-    }
+    public KeyCode getUpKey() { return upKey; }
 
-    public KeyCode getDownKey()
-    {
-        return downKey;
-    }
+    public KeyCode getDownKey() { return downKey; }
 
 }
 
