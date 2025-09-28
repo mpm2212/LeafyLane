@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ public class PlayerVisuals : MonoBehaviour
     [SerializeField] GameObject walkingTrail;
     ParticleSystem walkingTrailSystem;
     private PlayerMovement player;
-
+    WalkingDirection facingDirection;
+    
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -23,6 +25,8 @@ public class PlayerVisuals : MonoBehaviour
 
     void Update()
     {
+        facingDirection = player.GetWalkingDirection();
+
         animator.SetFloat("MovementMomentum", playerRB.linearVelocity.magnitude);
 
         FlipWalkingAnimation();
@@ -35,8 +39,18 @@ public class PlayerVisuals : MonoBehaviour
     void FlipWalkingAnimation()
     {
         if (playerRB.linearVelocity.magnitude == 0) { return; }
-        if (player.facingDirection == PlayerMovement.WalkingDirection.Left) { spriteRenderer.flipX = true; walkingTrail.transform.localScale = new Vector3(-1, -1, -1); }
-        else if (player.facingDirection == PlayerMovement.WalkingDirection.Right) { spriteRenderer.flipX = false; walkingTrail.transform.localScale = new Vector3(1, 1, 1); }
+
+        switch (facingDirection)
+        {
+            case WalkingDirection.Left:
+                spriteRenderer.flipX = true;
+                break;
+
+            case WalkingDirection.Right:
+                spriteRenderer.flipX = false;
+                break;
+        }
+
     }
 
     void PlayWalkingTrail()

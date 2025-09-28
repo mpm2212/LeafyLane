@@ -10,22 +10,13 @@ public class CanvasController : MonoBehaviour
     void Start()
     {
         aboutPanel.SetActive(false);
-
+        mainMenu.SetActive(true);
     }
 
-    void Update()
-    {
-
-    }
-
-    public void transitionToGame()
-    {
-        SceneManager.LoadScene("Game");
-    }
-
+    public void transitionToGame() { SceneManager.LoadScene("Game"); }
     public void toggleAboutPanel() { aboutPanel.SetActive(!aboutPanel.activeSelf); }
-    public void toggleMainMenu() { mainMenu.SetActive(!aboutPanel.activeSelf); }
-    public void ExitGame(){ Application.Quit(); }
+    public void toggleMainMenu() { mainMenu.SetActive(!mainMenu.activeSelf); }
+    public void ExitGame() { Application.Quit(); }
 
 }
 
