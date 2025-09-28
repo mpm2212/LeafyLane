@@ -49,7 +49,7 @@ MonoBehaviour:
   musicSource: {fileID: 1292147293488538198}
   sfxSource: {fileID: 6907137701627118484}
   musicVolume: 1
-  sfxVolume: 0.2
+  sfxVolume: 1
 --- !u!82 &1292147293488538198
 AudioSource:
   m_ObjectHideFlags: 0
