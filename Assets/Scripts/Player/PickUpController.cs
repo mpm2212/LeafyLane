@@ -4,23 +4,24 @@ using UnityEngine;
 public class PickUpController : MonoBehaviour
 {
 
-    [SerializeField] private float checkRange = 5f;
+    [SerializeField] private float checkRange;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
     Animator animator;
 
-    public float radius = 0.4f;
     private GameObject itemHolding;
     private Vector3 direction;
     private WalkingDirection facingDirection;
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
+    [SerializeField] Vector3 eyeOffset;
     RaycastHit2D hit;
 
     void Start()
     {
         player = GetComponentInParent<PlayerMovement>();
         animator = GetComponent<Animator>();
+        eyeOffset = new Vector3(0, -.2f, 0);
 
         if (player == null)
         {
@@ -41,10 +42,10 @@ public class PickUpController : MonoBehaviour
             else { CheckDirectionFacing(); }
         }
 
-        Debug.DrawRay(transform.position, Vector3.up, Color.red);
-        Debug.DrawRay(transform.position, Vector3.left, Color.red);
-        Debug.DrawRay(transform.position, Vector3.right, Color.red);
-        Debug.DrawRay(transform.position, Vector3.down, Color.red);
+        Debug.DrawRay(transform.position, Vector3.up*checkRange, Color.red);
+        Debug.DrawRay(transform.position+eyeOffset, Vector3.left*checkRange, Color.red);
+        Debug.DrawRay(transform.position+eyeOffset, Vector3.right*checkRange, Color.red);
+        Debug.DrawRay(transform.position, Vector3.down*checkRange, Color.red);
     }
 
     private void checkAllDirections()
@@ -79,12 +80,12 @@ public class PickUpController : MonoBehaviour
                 }
             case WalkingDirection.Left:
                 {
-                    hit = Physics2D.Raycast(transform.position, Vector3.left, checkRange, pickupMask);
+                    hit = Physics2D.Raycast(transform.position-eyeOffset, Vector3.left, checkRange, pickupMask);
                     break;
                 }
             case WalkingDirection.Right:
                 {
-                    hit = Physics2D.Raycast(transform.position, Vector3.right, checkRange, pickupMask);
+                    hit = Physics2D.Raycast(transform.position-eyeOffset, Vector3.right, checkRange, pickupMask);
                     break;
                 }
         }
@@ -105,7 +106,8 @@ public class PickUpController : MonoBehaviour
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
             
-            if (itemHolding.GetComponent<Rigidbody2D>()) { itemHolding.GetComponent<Rigidbody2D>().simulated = false; }
+            if (itemHolding.GetComponent<BoxCollider2D>() != null) { itemHolding.GetComponent<BoxCollider2D>().enabled = false; }
+            //Debug.Log("other items collider: " + itemHolding.GetComponent<Collider>().GetType().ToString());
 
             animator.SetTrigger("isHolding");
         }
@@ -134,7 +136,7 @@ public class PickUpController : MonoBehaviour
         itemHolding.transform.position = new Vector3(Mathf.RoundToInt(itemHolding.transform.position.x)+.5f, Mathf.RoundToInt(itemHolding.transform.position.y)+.5f, Mathf.RoundToInt(itemHolding.transform.position.z));
         itemHolding.transform.parent = null;
 
-        if (itemHolding.GetComponent<Rigidbody2D>()) { itemHolding.GetComponent<Rigidbody2D>().simulated = true; }
+        if (itemHolding.GetComponent<BoxCollider2D>() != null) { itemHolding.GetComponent<BoxCollider2D>().enabled = true; }
 
         itemHolding = null;
     }
