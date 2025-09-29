@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PickUpController : MonoBehaviour
 {
-    [SerializeField] private float checkRange;
+    [SerializeField] private float checkRange = 1.0f;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
 
@@ -18,7 +18,6 @@ public class PickUpController : MonoBehaviour
     private HighlightObjects highlighter;
 
     private GameObject currentlyHighlighted;
-    RaycastHit2D hit;
 
 
     void Start()
@@ -58,39 +57,31 @@ public class PickUpController : MonoBehaviour
     
     void CheckDirectionFacing()
     {
-        switch (facingDirection)
-        {
-            case WalkingDirection.Up:
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
+
+        if(hits.Length > 0){
+            Collider2D closest = null;
+            float closestDistance = Mathf.Infinity;
+            foreach(Collider2D hit in hits){
+                float dist = Vector2.Distance(transform.position, hit.transform.position);
+                if (dist < closestDistance)
                 {
-                    hit = Physics2D.Raycast(transform.position, Vector3.up, checkRange, pickupMask);
-                    break;
+                    closestDistance = dist;
+                    closest = hit;
                 }
-            case WalkingDirection.Down:
-                {
-                    hit = Physics2D.Raycast(transform.position, Vector3.down, checkRange, pickupMask);
-                    break;
-                }
-            case WalkingDirection.Left:
-                {
-                    hit = Physics2D.Raycast(transform.position, Vector3.left, checkRange, pickupMask);
-                    break;
-                }
-            case WalkingDirection.Right:
-                {
-                    hit = Physics2D.Raycast(transform.position, Vector3.right, checkRange, pickupMask);
-                    break;
-                }
+            }
+            if(closest != null)
+            {
+                pickUpItem(closest.gameObject);
+            }
+
         }
-
-        //Debug.Log("Player facing direction is : " + facingDirection);
-
-        if (hit) { pickUpItem(hit.collider.gameObject); }
 
     }
 
     private void pickUpItem(GameObject item)
     {
-        //direction = hit.point;
+
         if (item != null)
         {
             itemHolding = item;

@@ -48,24 +48,11 @@ public class HighlightObjects : MonoBehaviour
             if(newHighlighted != null) { StartFlashing(newHighlighted); }
             currentlyHighlighted = newHighlighted;
         }
-            
-        /*    
-            if ((currentlyHighlighted != null && currentlyHighlighted != newHighlighted))
-            {
-                //Resetting highlight
-                StopFlashing(currentlyHighlighted);
-                currentlyHighlighted = null;
-            }
-            */
-
             if(closestDistance > checkRange){
                 Debug.Log("Closest Dist > 2");
                 StopFlashing(currentlyHighlighted);
                 currentlyHighlighted = null;
-            }
-
-            
-        
+            }   
     }
 
 
@@ -77,12 +64,13 @@ public class HighlightObjects : MonoBehaviour
     }
 
     public void StopFlashing(GameObject item){
-        sr = item.GetComponent<SpriteRenderer>();
-        if(flashRoutine != null){
+        if (item == null) return;
+        sr = item.GetComponent<SpriteRenderer>(); 
+        if(flashRoutine != null)
+        {
             StopCoroutine(flashRoutine);
             flashRoutine = null;
         }
-
         sr.color = originalColor;
     }
 
