@@ -15,7 +15,6 @@ public class PickUpController : MonoBehaviour
 
     private GameObject itemHolding;
     private GameObject item;
-    private Vector3 direction;
     private WalkingDirection facingDirection;
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
@@ -25,7 +24,6 @@ public class PickUpController : MonoBehaviour
     private Coroutine flashRoutine;
     private SpriteRenderer sr;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponentInParent<PlayerMovement>();
@@ -38,7 +36,6 @@ public class PickUpController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -51,11 +48,6 @@ public class PickUpController : MonoBehaviour
         }
         facingDirection = player.facingDirection;
         HighlightNearbyItems();
-        
-        // Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
-        // Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
     }
 
     private void checkAllDirections()

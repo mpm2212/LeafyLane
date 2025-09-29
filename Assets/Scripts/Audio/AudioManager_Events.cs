@@ -1,4 +1,4 @@
-// code from Canvas exercise
+// code expanded on from Canvas exercise
 
 using UnityEngine;
 
@@ -24,6 +24,10 @@ public class AudioManager_Events : MonoBehaviour
         AudioEvents.PlaySFXEvent += HandlePlaySFX;
         AudioEvents.PlayMusicEvent += HandlePlayMusic;
         AudioEvents.SetMutedEvent += HandleSetMuted;
+        AudioEvents.SetMusicVolumeEvent += HandleSetMusicVolume;
+        AudioEvents.SetSFXVolumeEvent += HandleSetSFXVolume;
+        AudioEvents.SetSFXMutedEvent += HandleSetSFXMutedEvent;
+        AudioEvents.SetMusicMutedEvent += HandleSetMusicMutedEvent;
     }
 
     void OnDisable()
@@ -31,6 +35,10 @@ public class AudioManager_Events : MonoBehaviour
         AudioEvents.PlaySFXEvent -= HandlePlaySFX;
         AudioEvents.PlayMusicEvent -= HandlePlayMusic;
         AudioEvents.SetMutedEvent -= HandleSetMuted;
+        AudioEvents.SetMusicVolumeEvent -= HandleSetMusicVolume;
+        AudioEvents.SetSFXVolumeEvent -= HandleSetSFXVolume;
+        AudioEvents.SetSFXMutedEvent -= HandleSetSFXMutedEvent;
+        AudioEvents.SetMusicMutedEvent -= HandleSetMusicMutedEvent;
     }
 
     void HandlePlaySFX(AudioClip clip)
@@ -46,6 +54,20 @@ public class AudioManager_Events : MonoBehaviour
     }
 
     void HandleSetMuted(bool muted) { AudioListener.volume = muted ? 0f : 1f; }
+
+    void HandleSetMusicVolume(float volume) { musicVolume = volume; musicSource.volume = musicVolume; }
+    void HandleSetSFXVolume(float volume) { sfxVolume = volume; sfxSource.volume = sfxVolume; }
+    void HandleSetSFXMutedEvent(bool muted)
+    {
+        if (muted) { sfxSource.volume = sfxVolume; }
+        else { sfxSource.volume = 0; }
+    }
+
+    void HandleSetMusicMutedEvent(bool muted)
+    {
+        if (muted) { musicSource.volume = musicVolume; }
+        else { musicSource.volume = 0; }
+    }
 
 
 }
