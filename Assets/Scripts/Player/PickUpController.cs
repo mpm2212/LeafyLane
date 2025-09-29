@@ -176,7 +176,6 @@ public class PickUpController : MonoBehaviour
             sr.color = originalColor;
             yield return new WaitForSeconds(flashSpeed);
 
-
         }
     }
 }
