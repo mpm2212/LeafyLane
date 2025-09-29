@@ -17,7 +17,7 @@ public class PickUpController : MonoBehaviour
     private GameObject itemHolding;
     private GameObject item;
     private Vector3 direction;
-    private PlayerMovement.WalkingDirection facingDirection;
+    private WalkingDirection facingDirection;
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
 
@@ -50,7 +50,7 @@ public class PickUpController : MonoBehaviour
             }
             else { checkAllDirections(); }
         }
-        facingDirection = player.facingDir;
+        facingDirection = player.facingDirection;
         HighlightNearbyItems();
         
         // Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
@@ -93,16 +93,16 @@ public class PickUpController : MonoBehaviour
     {
         switch (facingDirection)
         {
-            case PlayerMovement.WalkingDirection.Up:
+            case WalkingDirection.Up:
                 offset = new Vector3(0, 1, 0);
                 break;
-            case PlayerMovement.WalkingDirection.Down:
+            case WalkingDirection.Down:
                 offset = new Vector3(0, -1, 0);
                 break;
-            case PlayerMovement.WalkingDirection.Right:
+            case WalkingDirection.Right:
                 offset = new Vector3(1, 0, 0);
                 break;
-            case PlayerMovement.WalkingDirection.Left:
+            case WalkingDirection.Left:
                 offset = new Vector3(-1, 0, 0);
                 break;
         }

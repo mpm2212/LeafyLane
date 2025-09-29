@@ -3,7 +3,7 @@ using UnityEngine;
 public class BackgroundController : MonoBehaviour
 {
     [SerializeField] private float pushForce = 1.0f;
-    private PlayerMovement.WalkingDirection direction;
+    private WalkingDirection direction;
     private Vector3 offset = new Vector3(0,0,0);
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

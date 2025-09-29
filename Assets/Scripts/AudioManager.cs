@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 // code from Singleton Audio Manager exercise in Canvas
@@ -19,6 +18,7 @@ public class AudioManager : MonoBehaviour
         AudioManagerSingleton();
         MakeMusicSourceLoopable();
         ApplyVolumes();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void AudioManagerSingleton()
