@@ -5,7 +5,7 @@ public enum WalkingDirection { Up, Down, Left, Right };
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float speed;
-    [SerializeField] int maxSpeed;
+    [SerializeField] float maxSpeed;
     [SerializeField] float drag = 5.0f;
 
     [Header("Input Keys")]
@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D playerRB;
     private Vector2 playerMovement;
 
-    public WalkingDirection facingDirection { get; private set;}
+    public WalkingDirection facingDirection { get; private set; }
 
 
     public WalkingDirection GetWalkingDirection()
@@ -35,44 +35,48 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        playerMovement = Vector2.zero;
+        playerRB.linearVelocity = new Vector2(0, 0);
+    
         if (Input.GetKey(leftKey))
         {
-            playerMovement.x = -1.0f;
+            moveX(-speed);
             facingDirection = WalkingDirection.Left;
         }
         if (Input.GetKey(rightKey))
         {
-            playerMovement.x = 1.0f;
+            moveX(speed);
             facingDirection = WalkingDirection.Right;
         }
         if (Input.GetKey(upKey))
         {
-            playerMovement.y = 1.0f;
+            moveY(speed);
             facingDirection = WalkingDirection.Up;
         }
         if (Input.GetKey(downKey))
         {
-            playerMovement.y = -1.0f;
+            moveY(-speed);
             facingDirection = WalkingDirection.Down;
         }
 
-        playerMovement.Normalize();
+        NormalizeVelocity();
     }
 
-    void FixedUpdate(){
+    void moveX(float velocity) { playerRB.linearVelocityX += velocity; }
 
-        if (playerMovement != Vector2.zero)
+    void moveY(float velocity) { playerRB.linearVelocityY += velocity; }
+
+    void NormalizeVelocity()
+    {
+        Vector2 playerMovement = playerRB.linearVelocity;
+
+        if (playerMovement.magnitude > maxSpeed)
         {
-            Vector2 force = playerMovement * speed;
-            playerRB.AddForce(force);
-
-            if (playerRB.linearVelocity.magnitude > maxSpeed)
-            {
-                playerRB.linearVelocity = playerRB.linearVelocity.normalized * maxSpeed;
-            }
+            playerMovement.Normalize();
+            playerRB.linearVelocity = playerMovement * maxSpeed;
         }
     }
+
+
 }
 
 
