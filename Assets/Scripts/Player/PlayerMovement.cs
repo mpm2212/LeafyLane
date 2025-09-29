@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 
     public WalkingDirection facingDir {get; private set;}
 
+
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
@@ -30,26 +31,30 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         playerRB.linearVelocity = new Vector2(0, 0);
+        Vector2 move = Vector2.zero;
 
         if (Input.GetKey(leftKey)) 
         { 
-            moveX(-speed); 
-            facingDir = WalkingDirection.Left;}
+            move.x = -speed;
+            facingDir = WalkingDirection.Left;
+        }
         if (Input.GetKey(rightKey)) 
         { 
-            moveX(speed); 
+            move.x = speed;
             facingDir = WalkingDirection.Right;
         }
         if (Input.GetKey(upKey)) 
         { 
-            moveY(speed); 
+            move.y = speed;
             facingDir = WalkingDirection.Up;
         }
         if (Input.GetKey(downKey)) 
         { 
-            moveY(-speed); 
+            move.y = -speed;
             facingDir = WalkingDirection.Down;
         }
+
+        playerRB.linearVelocity = new Vector2(move.x, move.y) + playerRB.linearVelocity * 0.1f;
     }
 
     void moveX(float velocity) { playerRB.linearVelocityX += velocity; }
