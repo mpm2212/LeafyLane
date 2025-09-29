@@ -77,7 +77,7 @@ public class GardenManager : MonoBehaviour
         if (otherTag == "Meadow")
         {
             meadowItemCount--;
-            Debug.Log(meadowItemCount);
+            Debug.Log("meadow item count: " + meadowItemCount);
         }
     }
 

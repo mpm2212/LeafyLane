@@ -94,9 +94,11 @@ public class PickUpController : MonoBehaviour
             itemHolding = item;
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
-            if (itemHolding.GetComponent<Rigidbody2D>())
+
+            BoxCollider2D itemCollider = itemHolding.GetComponent<BoxCollider2D>();
+            if (itemCollider != null)
             {
-                itemHolding.GetComponent<Rigidbody2D>().simulated = false;
+                itemCollider.isTrigger = true;
             }
             animator.SetBool("isHolding", true);
             //StopFlashing(itemHolding);
@@ -125,9 +127,11 @@ public class PickUpController : MonoBehaviour
 
         itemHolding.transform.position = transform.position + offset;
         itemHolding.transform.parent = null;
-        if (itemHolding.GetComponent<Rigidbody2D>())
+
+        BoxCollider2D itemCollider = itemHolding.GetComponent<BoxCollider2D>();
+        if (itemCollider != null)
         {
-            itemHolding.GetComponent<Rigidbody2D>().simulated = true;
+            itemCollider.isTrigger = false;
         }
         itemHolding = null;
         animator.SetBool("isHolding", false);
