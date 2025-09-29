@@ -7,11 +7,8 @@ public class PickUpController : MonoBehaviour
     [SerializeField] private float checkRange;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
-    [SerializeField] private Color flashColor = Color.blue;
-    [SerializeField] private float flashSpeed = 0.5f;
-    Animator animator;
 
-    public float radius = 0.4f;
+    Animator animator;
 
     private GameObject itemHolding;
     private GameObject item;
@@ -20,9 +17,8 @@ public class PickUpController : MonoBehaviour
     private Vector3 offset = new Vector3(0,0,0);
 
     private GameObject currentlyHighlighted;
-    private Color originalColor;
-    private Coroutine flashRoutine;
-    private SpriteRenderer sr;
+    RaycastHit2D hit;
+
 
     void Start()
     {
@@ -44,10 +40,10 @@ public class PickUpController : MonoBehaviour
             {
                 putDownObject();
             }
-            else { checkAllDirections(); }
+            else { CheckDirectionFacing(); }
         }
+
         facingDirection = player.facingDirection;
-        HighlightNearbyItems();
     }
 
     private void checkAllDirections()
@@ -56,6 +52,38 @@ public class PickUpController : MonoBehaviour
         {
             pickUpItem(currentlyHighlighted);
         }
+    }
+    
+    void CheckDirectionFacing()
+    {
+        switch (facingDirection)
+        {
+            case WalkingDirection.Up:
+                {
+                    hit = Physics2D.Raycast(transform.position, Vector3.up, checkRange, pickupMask);
+                    break;
+                }
+            case WalkingDirection.Down:
+                {
+                    hit = Physics2D.Raycast(transform.position, Vector3.down, checkRange, pickupMask);
+                    break;
+                }
+            case WalkingDirection.Left:
+                {
+                    hit = Physics2D.Raycast(transform.position, Vector3.left, checkRange, pickupMask);
+                    break;
+                }
+            case WalkingDirection.Right:
+                {
+                    hit = Physics2D.Raycast(transform.position, Vector3.right, checkRange, pickupMask);
+                    break;
+                }
+        }
+
+        Debug.Log("Player facing direction is : " + facingDirection);
+
+        if (hit != false) { pickUpItem(hit.collider.gameObject); }
+
     }
 
     private void pickUpItem(GameObject item)
@@ -71,10 +99,10 @@ public class PickUpController : MonoBehaviour
                 itemHolding.GetComponent<Rigidbody2D>().simulated = false;
             }
             animator.SetBool("isHolding", true);
-            StopFlashing(itemHolding);
+            //StopFlashing(itemHolding);
             currentlyHighlighted = null;
         }
-        
+
     }
 
     private void putDownObject()
@@ -107,65 +135,5 @@ public class PickUpController : MonoBehaviour
 
     }
 
-    private void HighlightNearbyItems()
-    {
-        Collider2D[] nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
-        GameObject newHighlighted = null;
-        float closestDistance = Mathf.Infinity; 
-
-        foreach (var itemCollider in nearbyItems)
-        {
-            item = itemCollider.gameObject;
-
-            float distance = Vector2.Distance(transform.position, item.transform.position);
-
-            if(distance < closestDistance)
-            {
-                closestDistance = distance;
-                newHighlighted = item;
-            }
-
-            if(currentlyHighlighted != null && currentlyHighlighted != newHighlighted){
-                //Resetting highlight
-                StopFlashing(currentlyHighlighted);
-                currentlyHighlighted = null;
-            }
-
-            if(newHighlighted != null && currentlyHighlighted != newHighlighted)
-            {
-                StartFlashing(newHighlighted);
-                currentlyHighlighted = newHighlighted;
-            }
-        }
-    }
-
-    public void StartFlashing(GameObject item){
-        sr = item.GetComponent<SpriteRenderer>();
-        originalColor = sr.color;
-
-        flashRoutine = StartCoroutine(Flash(sr));
-    }
-
-    public void StopFlashing(GameObject item){
-        sr = item.GetComponent<SpriteRenderer>();
-        if(flashRoutine != null){
-            StopCoroutine(flashRoutine);
-            flashRoutine = null;
-        }
-
-        sr.color = originalColor;
-    }
-
-    private IEnumerator Flash(SpriteRenderer sr)
-    {
-        while(true)
-        {
-            sr.color = flashColor;
-            yield return new WaitForSeconds(flashSpeed);
-            sr.color = originalColor;
-            yield return new WaitForSeconds(flashSpeed);
-
-
-        }
-    }
+ 
 }
