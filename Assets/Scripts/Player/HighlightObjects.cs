@@ -8,10 +8,11 @@ public class HighlightObjects : MonoBehaviour
     private Color originalColor;
     private Coroutine flashRoutine;
     private SpriteRenderer sr;
-    int checkRange = 3;
     private GameObject item;
+
     [SerializeField] private Color flashColor = Color.blue;
     [SerializeField] private float flashSpeed = 0.5f;
+    [SerializeField] private int checkRange = 2;
 
     [SerializeField] LayerMask pickupMask;
 
@@ -31,35 +32,42 @@ public class HighlightObjects : MonoBehaviour
         GameObject newHighlighted = null;
 
         float closestDistance = Mathf.Infinity;
-
-        foreach (var itemCollider in nearbyItems)
-        {
+        foreach(Collider2D itemCollider in nearbyItems ){
             item = itemCollider.gameObject;
-
+            Debug.Log("Item: " + itemCollider.name);
             float distance = Vector2.Distance(transform.position, item.transform.position);
-
             if (distance < closestDistance)
             {
                 closestDistance = distance;
                 newHighlighted = item;
             }
+        }
 
-            if ((currentlyHighlighted != null && currentlyHighlighted != newHighlighted) || closestDistance > 2f)
+        if(newHighlighted != currentlyHighlighted){
+            if(currentlyHighlighted != null){StopFlashing(currentlyHighlighted); }
+            if(newHighlighted != null) { StartFlashing(newHighlighted); }
+            currentlyHighlighted = newHighlighted;
+        }
+            
+        /*    
+            if ((currentlyHighlighted != null && currentlyHighlighted != newHighlighted))
             {
                 //Resetting highlight
                 StopFlashing(currentlyHighlighted);
                 currentlyHighlighted = null;
             }
+            */
 
-            if (newHighlighted != null && currentlyHighlighted != newHighlighted)
-            {
-                StartFlashing(newHighlighted);
-                currentlyHighlighted = newHighlighted;
+            if(closestDistance > checkRange){
+                Debug.Log("Closest Dist > 2");
+                StopFlashing(currentlyHighlighted);
+                currentlyHighlighted = null;
             }
-        }
 
-
+            
+        
     }
+
 
     public void StartFlashing(GameObject item){
         sr = item.GetComponent<SpriteRenderer>();

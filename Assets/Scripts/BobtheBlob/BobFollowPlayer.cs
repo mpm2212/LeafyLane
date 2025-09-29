@@ -29,7 +29,7 @@ public class BobFollowPlayer : MonoBehaviour
     }
 
     void chooseSpawnLocation(){
-        int position = Random.Range(0, bobSpawnPoints.Length);
+        int position = Random.Range(1, bobSpawnPoints.Length);
         GameObject spawnPos = bobSpawnPoints[position];
 
     }

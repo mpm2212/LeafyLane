@@ -4,6 +4,7 @@ using System.Collections;
 public class WaterController : MonoBehaviour
 {
     [SerializeField] private float pushForce = 10f;
+
     private WalkingDirection direction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -25,7 +26,8 @@ public class WaterController : MonoBehaviour
             Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
             Vector2 pushDir = other.contacts[0].normal;
 
-            rb.AddForce(-pushDir * pushForce, ForceMode2D.Impulse);
+
+            rb.AddForce(Vector2.up * pushForce, ForceMode2D.Impulse);
             Debug.Log("Player pos after: " + rb.position);
         }
     }

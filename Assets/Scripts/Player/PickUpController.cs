@@ -15,6 +15,7 @@ public class PickUpController : MonoBehaviour
     private WalkingDirection facingDirection;
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
+    private HighlightObjects highlighter;
 
     private GameObject currentlyHighlighted;
     RaycastHit2D hit;
@@ -24,6 +25,7 @@ public class PickUpController : MonoBehaviour
     {
         player = GetComponentInParent<PlayerMovement>();
         animator = GetComponent<Animator>();
+        highlighter = GetComponent<HighlightObjects>();
 
         if (player == null)
         {
@@ -80,9 +82,9 @@ public class PickUpController : MonoBehaviour
                 }
         }
 
-        Debug.Log("Player facing direction is : " + facingDirection);
+        //Debug.Log("Player facing direction is : " + facingDirection);
 
-        if (hit != false) { pickUpItem(hit.collider.gameObject); }
+        if (hit) { pickUpItem(hit.collider.gameObject); }
 
     }
 
@@ -92,6 +94,7 @@ public class PickUpController : MonoBehaviour
         if (item != null)
         {
             itemHolding = item;
+            Debug.Log("Item Holding: " + itemHolding.name);
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
             if (itemHolding.GetComponent<Rigidbody2D>())
@@ -99,14 +102,16 @@ public class PickUpController : MonoBehaviour
                 itemHolding.GetComponent<Rigidbody2D>().simulated = false;
             }
             animator.SetBool("isHolding", true);
-            //StopFlashing(itemHolding);
-            currentlyHighlighted = null;
+            highlighter.StopFlashing(itemHolding);
+            //currentlyHighlighted = null;
         }
 
     }
 
     private void putDownObject()
     {
+
+        Debug.Log("Putting Down Object");
         switch (facingDirection)
         {
             case WalkingDirection.Up:
@@ -134,6 +139,4 @@ public class PickUpController : MonoBehaviour
         //Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
 
     }
-
- 
 }
