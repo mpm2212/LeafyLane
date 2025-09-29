@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BackgroundController : MonoBehaviour
+public class WaterController : MonoBehaviour
 {
     [SerializeField] private float pushForce = 1.0f;
     private PlayerMovement.WalkingDirection direction;
