@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6841763381552788351}
   m_Layer: 6
   m_Name: Barrel_Up
-  m_TagString: Untagged
+  m_TagString: Village
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

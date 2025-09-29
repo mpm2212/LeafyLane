@@ -52,11 +52,8 @@ public class PickUpController : MonoBehaviour
 
     private void checkAllDirections()
     {
-        Debug.Log("CheckingAllDirections");
-
         if(currentlyHighlighted != null)
         {
-            Debug.Log("Currently Highlighted not null");
             pickUpItem(currentlyHighlighted);
         }
     }
@@ -106,7 +103,7 @@ public class PickUpController : MonoBehaviour
         }
         itemHolding = null;
         animator.SetBool("isHolding", false);
-        Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
+        //Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
 
     }
 

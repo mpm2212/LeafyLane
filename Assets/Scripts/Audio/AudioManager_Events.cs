@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AudioManager_Events : MonoBehaviour
 {
+    public static AudioManager_Events Instance { get; private set; }
+
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
@@ -14,6 +16,7 @@ public class AudioManager_Events : MonoBehaviour
 
     void Awake()
     {
+        AudioManagerSingleton();
         if (musicSource == null) { musicSource = gameObject.AddComponent<AudioSource>(); }
         if (sfxSource == null) { sfxSource = gameObject.AddComponent<AudioSource>(); }
         musicSource.loop = true;
@@ -39,6 +42,18 @@ public class AudioManager_Events : MonoBehaviour
         AudioEvents.SetSFXVolumeEvent -= HandleSetSFXVolume;
         AudioEvents.SetSFXMutedEvent -= HandleSetSFXMutedEvent;
         AudioEvents.SetMusicMutedEvent -= HandleSetMusicMutedEvent;
+    }
+
+    void AudioManagerSingleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void HandlePlaySFX(AudioClip clip)

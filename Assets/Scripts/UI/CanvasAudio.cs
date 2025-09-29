@@ -40,13 +40,11 @@ public class CanvasAudio : MonoBehaviour
     public void UpdateMusicVolume()
     {
         if (musicSlider != null) { AudioEvents.RaiseSetMusicVolume(musicSlider.value); }
-        Debug.Log("music slider value: " + musicSlider.value);
     }
 
     public void UpdateSoundVolume()
     {
         if (soundSlider != null) { AudioEvents.RaiseSetSFXVolume(soundSlider.value); }
-        Debug.Log("sfx slider value: " + soundSlider.value);
     }
 
     public void SetMusicMuted()

@@ -13,7 +13,7 @@ public class CanvasController : MonoBehaviour
         mainMenu.SetActive(true);
     }
 
-    public void transitionToGame() { SceneManager.LoadScene("Game"); }
+    public void transitionToGame() { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); }
     public void toggleAboutPanel() { aboutPanel.SetActive(!aboutPanel.activeSelf); }
     public void toggleMainMenu() { mainMenu.SetActive(!mainMenu.activeSelf); }
     public void ExitGame() { Application.Quit(); }

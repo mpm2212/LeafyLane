@@ -79,7 +79,6 @@ public class GameIntroCanvasController : MonoBehaviour
         mainMenuPanel.SetActive(!mainMenuPanel.activeInHierarchy);
         if (mainMenuPanel.activeInHierarchy) { Time.timeScale = 0; }
         else { Time.timeScale = 1; }
-        Debug.Log("time scale is: " + Time.timeScale);
     }
 
     public void ExitGame() { Application.Quit(); }
