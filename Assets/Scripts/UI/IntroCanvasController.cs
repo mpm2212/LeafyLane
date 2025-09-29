@@ -10,25 +10,28 @@ public class IntroCanvasController : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] GameObject nutty;
     Image nuttyImage;
-    [SerializeField] GameObject startGameButton;
+    [SerializeField] GameObject spaceToContinue;
 
     [Header("Nutty Sprites")]
 
     [SerializeField] Sprite nuttyIdle;
     [SerializeField] Sprite nuttyExcited;
     [SerializeField] Sprite nuttyCalm;
+    bool UICoroutineRunning;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         nuttyImage = nutty.GetComponent<Image>();
-        startGameButton.SetActive(false);
         StartCoroutine(introText());
+        spaceToContinue.SetActive(true);
     }
 
     void Update()
     {
-
+        if (!UICoroutineRunning && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
+        {
+            LoadGame();
+        }
     }
 
     /*
@@ -43,27 +46,30 @@ public class IntroCanvasController : MonoBehaviour
 
     IEnumerator introText()
     {
+        UICoroutineRunning = true;
         nuttyImage.sprite = nuttyIdle;
         text.text = "Oh hey there, collector! Nice to see you.";
-        yield return new WaitForSeconds(4);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return));
 
+        spaceToContinue.SetActive(false);
         nuttyImage.sprite = nuttyCalm;
         text.text = "Let me show you my favorite place, Leafy Lane.";
-        yield return new WaitForSeconds(4);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return));
+
 
         nuttyImage.sprite = nuttyExcited;
         text.text = "An island you have yet to explore - appealing, I know. Here, I set this up for you. There's a place to display your finds!";
-        yield return new WaitForSeconds(6);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return));
+
 
         nuttyImage.sprite = nuttyIdle;
         text.text = "I wonder what awaits you out there. Anywho, have fun!";
-        startGameButton.SetActive(true);
-        yield return new WaitForSeconds(5);
+        spaceToContinue.SetActive(true);
+        spaceToContinue.GetComponent<TextMeshProUGUI>().text = "Press space or enter to start the game";
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return));
 
+        UICoroutineRunning = false;
     }
 
-    public void LoadGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    public void LoadGame() { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); }
 }
