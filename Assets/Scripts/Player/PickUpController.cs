@@ -1,26 +1,35 @@
-using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class PickUpController : MonoBehaviour
 {
     [SerializeField] private float checkRange;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
+    [SerializeField] private Color flashColor = Color.blue;
+    [SerializeField] private float flashSpeed = 0.5f;
     Animator animator;
 
+    public float radius = 0.4f;
+
     private GameObject itemHolding;
+    private GameObject item;
     private Vector3 direction;
     private WalkingDirection facingDirection;
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
-    [SerializeField] Vector3 eyeOffset;
-    RaycastHit2D hit;
 
+    private GameObject currentlyHighlighted;
+    private Color originalColor;
+    private Coroutine flashRoutine;
+    private SpriteRenderer sr;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponentInParent<PlayerMovement>();
         animator = GetComponent<Animator>();
-        eyeOffset = new Vector3(0, -.2f, 0);
 
         if (player == null)
         {
@@ -28,89 +37,55 @@ public class PickUpController : MonoBehaviour
         }
 
     }
+
+    // Update is called once per frame
     void Update()
     {
-        facingDirection = player.facingDirection;
-
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (itemHolding)
             {
                 putDownObject();
             }
-            else { CheckDirectionFacing(); }
+            else { checkAllDirections(); }
         }
-
-        Debug.DrawRay(transform.position, Vector3.up*checkRange, Color.red);
-        Debug.DrawRay(transform.position+eyeOffset, Vector3.left*checkRange, Color.red);
-        Debug.DrawRay(transform.position+eyeOffset, Vector3.right*checkRange, Color.red);
-        Debug.DrawRay(transform.position, Vector3.down*checkRange, Color.red);
+        facingDirection = player.facingDirection;
+        HighlightNearbyItems();
+        
+        // Debug.DrawLine(transform.position, Vector3.up + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.down + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.left + transform.position, Color.red);
+        // Debug.DrawLine(transform.position, Vector3.right + transform.position, Color.red);
     }
 
     private void checkAllDirections()
     {
-        RaycastHit2D up = Physics2D.Raycast(transform.position, Vector3.up, checkRange, pickupMask);
-        RaycastHit2D down = Physics2D.Raycast(transform.position, Vector3.down, checkRange, pickupMask);
-        RaycastHit2D right = Physics2D.Raycast(transform.position, Vector3.right, checkRange, pickupMask);
-        RaycastHit2D left = Physics2D.Raycast(transform.position, Vector3.left, checkRange, pickupMask);
+        Debug.Log("CheckingAllDirections");
 
-
-
-        RaycastHit2D[] hits = new RaycastHit2D[] {up, down, right, left};
-        foreach (RaycastHit2D hit in hits)
+        if(currentlyHighlighted != null)
         {
-            pickUpItem(hit);
+            Debug.Log("Currently Highlighted not null");
+            pickUpItem(currentlyHighlighted);
         }
     }
 
-    void CheckDirectionFacing()
+    private void pickUpItem(GameObject item)
     {
-        switch (facingDirection)
+        //direction = hit.point;
+        if (item != null)
         {
-            case WalkingDirection.Up:
-                {
-                    hit = Physics2D.Raycast(transform.position, Vector3.up, checkRange, pickupMask);
-                    break;
-                }
-            case WalkingDirection.Down:
-                {
-                    hit = Physics2D.Raycast(transform.position, Vector3.down, checkRange, pickupMask);
-                    break;
-                }
-            case WalkingDirection.Left:
-                {
-                    hit = Physics2D.Raycast(transform.position-eyeOffset, Vector3.left, checkRange, pickupMask);
-                    break;
-                }
-            case WalkingDirection.Right:
-                {
-                    hit = Physics2D.Raycast(transform.position-eyeOffset, Vector3.right, checkRange, pickupMask);
-                    break;
-                }
-        }
-
-        Debug.Log("Player facing direction is : " + facingDirection);
-
-        if (hit != false) { pickUpItem(hit); }
-
-    }
-
-    private void pickUpItem(RaycastHit2D hit)
-    {
-        direction = hit.point;
-        if (hit)
-        {
-            itemHolding = hit.collider.gameObject;
-
+            itemHolding = item;
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
-            
-            if (itemHolding.GetComponent<BoxCollider2D>() != null) { itemHolding.GetComponent<BoxCollider2D>().enabled = false; }
-            //Debug.Log("other items collider: " + itemHolding.GetComponent<Collider>().GetType().ToString());
-
-            animator.SetTrigger("isHolding");
+            if (itemHolding.GetComponent<Rigidbody2D>())
+            {
+                itemHolding.GetComponent<Rigidbody2D>().simulated = false;
+            }
+            animator.SetBool("isHolding", true);
+            StopFlashing(itemHolding);
+            currentlyHighlighted = null;
         }
-
+        
     }
 
     private void putDownObject()
@@ -118,7 +93,7 @@ public class PickUpController : MonoBehaviour
         switch (facingDirection)
         {
             case WalkingDirection.Up:
-                offset = new Vector3(0, .5f, 0);
+                offset = new Vector3(0, 1, 0);
                 break;
             case WalkingDirection.Down:
                 offset = new Vector3(0, -1, 0);
@@ -132,11 +107,76 @@ public class PickUpController : MonoBehaviour
         }
 
         itemHolding.transform.position = transform.position + offset;
-        itemHolding.transform.position = new Vector3(Mathf.RoundToInt(itemHolding.transform.position.x)+.5f, Mathf.RoundToInt(itemHolding.transform.position.y)+.5f, Mathf.RoundToInt(itemHolding.transform.position.z));
         itemHolding.transform.parent = null;
-
-        if (itemHolding.GetComponent<BoxCollider2D>() != null) { itemHolding.GetComponent<BoxCollider2D>().enabled = true; }
-
+        if (itemHolding.GetComponent<Rigidbody2D>())
+        {
+            itemHolding.GetComponent<Rigidbody2D>().simulated = true;
+        }
         itemHolding = null;
+        animator.SetBool("isHolding", false);
+        Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
+
+    }
+
+    private void HighlightNearbyItems()
+    {
+        Collider2D[] nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
+        GameObject newHighlighted = null;
+        float closestDistance = Mathf.Infinity; 
+
+        foreach (var itemCollider in nearbyItems)
+        {
+            item = itemCollider.gameObject;
+
+            float distance = Vector2.Distance(transform.position, item.transform.position);
+
+            if(distance < closestDistance)
+            {
+                closestDistance = distance;
+                newHighlighted = item;
+            }
+
+            if(currentlyHighlighted != null && currentlyHighlighted != newHighlighted){
+                //Resetting highlight
+                StopFlashing(currentlyHighlighted);
+                currentlyHighlighted = null;
+            }
+
+            if(newHighlighted != null && currentlyHighlighted != newHighlighted)
+            {
+                StartFlashing(newHighlighted);
+                currentlyHighlighted = newHighlighted;
+            }
+        }
+    }
+
+    public void StartFlashing(GameObject item){
+        sr = item.GetComponent<SpriteRenderer>();
+        originalColor = sr.color;
+
+        flashRoutine = StartCoroutine(Flash(sr));
+    }
+
+    public void StopFlashing(GameObject item){
+        sr = item.GetComponent<SpriteRenderer>();
+        if(flashRoutine != null){
+            StopCoroutine(flashRoutine);
+            flashRoutine = null;
+        }
+
+        sr.color = originalColor;
+    }
+
+    private IEnumerator Flash(SpriteRenderer sr)
+    {
+        while(true)
+        {
+            sr.color = flashColor;
+            yield return new WaitForSeconds(flashSpeed);
+            sr.color = originalColor;
+            yield return new WaitForSeconds(flashSpeed);
+
+
+        }
     }
 }

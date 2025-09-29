@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
         return facingDirection;
     }
 
+
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         playerRB.linearVelocity = new Vector2(0, 0);
+        Vector2 move = Vector2.zero;
 
         if (Input.GetKey(leftKey))
         {
