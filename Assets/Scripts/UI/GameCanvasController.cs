@@ -2,91 +2,104 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEditor;
+using Unity.VisualScripting;
+using TMPro;
+using System;
+using UnityEngine.InputSystem;
 
-public class GameIntroCanvasController : MonoBehaviour
+public class GameCanvasController : MonoBehaviour
 {
     [Header("Panels")]
     [SerializeField] GameObject WASDPanel;
     [SerializeField] GameObject LShiftPanel;
-    [SerializeField] GameObject helpPanel;
     [SerializeField] GameObject mainMenuPanel;
     [SerializeField] GameObject settingsPanel;
+    [SerializeField] GameObject regionUnlockedPanel;
+    [SerializeField] TextMeshProUGUI regionUnlockedText;
 
     Coroutine WASDTimer;
-    Coroutine LShiftTimer;
-    [SerializeField] float hideTime;
 
+    [SerializeField] int hideTime;
+
+    public static GameCanvasController Instance { get; private set; }
+
+    void Awake()
+    {
+        GameCanvasControllerSingleton();
+    }
     void Start()
     {
         WASDPanel.SetActive(true);
         LShiftPanel.SetActive(false);
-        helpPanel.SetActive(false);
         mainMenuPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        regionUnlockedPanel.SetActive(false);
+
+        hideTime = 4;
+
+        WASDTimer = StartCoroutine(KeyExplanationTimer());
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
-        {
-            if (WASDPanel.activeInHierarchy && WASDTimer == null)
-            {
-                WASDTimer = StartCoroutine(HelpTimer(WASDPanel));
-            }
-        }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !LShiftPanel.activeInHierarchy && !WASDPanel.activeInHierarchy && LShiftTimer == null)
-        {
-            LShiftPanel.SetActive(true);
-            StartCoroutine(HelpTimer(LShiftPanel));
-        }
-        if (Input.GetKeyDown(KeyCode.Escape)) { ToggleMainMenu(); }
     }
 
-
-    IEnumerator IFadeIn(Image panelImage)
+    void GameCanvasControllerSingleton()
     {
-        Color panelColor = panelImage.color;
-
-        while (panelColor.a < 1f)
+        if (Instance != null && Instance != this)
         {
-            panelImage.color = new Color(panelColor.r, panelColor.g, panelColor.b, panelColor.a + (Time.deltaTime / hideTime));
-            yield return null;
-
+            Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
-    IEnumerator HelpTimer(GameObject panel)
+    IEnumerator KeyExplanationTimer()
     {
-        yield return new WaitForSeconds(hideTime);
+        WASDPanel.SetActive(true);
 
-        if (LShiftPanel.activeInHierarchy == false)
-        {
-            LShiftPanel.SetActive(true);
-        }
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D));
+        yield return new WaitForSeconds(5);
 
+        WASDPanel.SetActive(false);
+        LShiftPanel.SetActive(true);
+
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.LeftShift));
+        yield return new WaitForSeconds(5);
+
+        LShiftPanel.SetActive(false);
+    }
+
+    IEnumerator ShowPanelForSeconds(GameObject panel, int seconds)
+    {
+        panel.SetActive(true);
+        yield return new WaitForSeconds(seconds);
         panel.SetActive(false);
-
     }
 
-    public void ToggleHelpPanel()
+    public void TogglePanel(GameObject panel)
     {
-        helpPanel.SetActive(!helpPanel.activeInHierarchy);
+        if (panel != null) { panel.SetActive(!panel.activeInHierarchy); }
     }
 
     public void ToggleMainMenu()
     {
-        mainMenuPanel.SetActive(!mainMenuPanel.activeInHierarchy);
+        TogglePanel(mainMenuPanel);
         if (mainMenuPanel.activeInHierarchy) { Time.timeScale = 0; }
         else { Time.timeScale = 1; }
     }
 
     public void ExitGame() { Application.Quit(); }
 
-    public void ToggleSettingsPanel()
+    public void ShowRegionUnlocked(String text)
     {
-        settingsPanel.SetActive(!settingsPanel.activeInHierarchy);
+        regionUnlockedText.text = text;
+        StartCoroutine(ShowPanelForSeconds(regionUnlockedPanel, hideTime));
     }
+
 
 
 }

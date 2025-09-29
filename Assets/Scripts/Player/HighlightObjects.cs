@@ -8,12 +8,14 @@ public class HighlightObjects : MonoBehaviour
     private Color originalColor;
     private Coroutine flashRoutine;
     private SpriteRenderer sr;
-    int checkRange = 3;
+    int checkRange = 2;
     private GameObject item;
     [SerializeField] private Color flashColor = Color.blue;
     [SerializeField] private float flashSpeed = 0.5f;
 
     [SerializeField] LayerMask pickupMask;
+    Collider2D[] nearbyItems;
+    GameObject newHighlighted;
 
     void Start()
     {
@@ -22,14 +24,17 @@ public class HighlightObjects : MonoBehaviour
 
     void Update()
     {
+        GetNearbyItems();
         HighlightNearbyItems();
     }
 
-    private void HighlightNearbyItems()
+    void GetNearbyItems()
     {
-        Collider2D[] nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
-        GameObject newHighlighted = null;
+        nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
+    }
 
+    void CheckForClosestItem()
+    {
         float closestDistance = Mathf.Infinity;
 
         foreach (var itemCollider in nearbyItems)
@@ -43,8 +48,16 @@ public class HighlightObjects : MonoBehaviour
                 closestDistance = distance;
                 newHighlighted = item;
             }
+        }
+    }
 
-            if ((currentlyHighlighted != null && currentlyHighlighted != newHighlighted) || closestDistance > 2f)
+    private void HighlightNearbyItems()
+    {
+        //newHighlighted = null;
+
+        CheckForClosestItem();
+
+            if (currentlyHighlighted != null && currentlyHighlighted != newHighlighted)
             {
                 //Resetting highlight
                 StopFlashing(currentlyHighlighted);
@@ -59,7 +72,6 @@ public class HighlightObjects : MonoBehaviour
         }
 
 
-    }
 
     public void StartFlashing(GameObject item){
         sr = item.GetComponent<SpriteRenderer>();
@@ -72,6 +84,7 @@ public class HighlightObjects : MonoBehaviour
         sr = item.GetComponent<SpriteRenderer>();
         if(flashRoutine != null){
             StopCoroutine(flashRoutine);
+            sr.color = originalColor;
             flashRoutine = null;
         }
 

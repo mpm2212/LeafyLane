@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 3
   tags:
   - Water
+  - Meadow
+  - Meadow-2
+  - Lake
+  - Village
+  - Forest
   layers:
   - Default
   - TransparentFX

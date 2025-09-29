@@ -18,6 +18,8 @@ public class PickUpController : MonoBehaviour
 
     private GameObject currentlyHighlighted;
     RaycastHit2D hit;
+    BoxCollider2D itemCollider;
+    Rigidbody2D itemRB;
 
 
     void Start()
@@ -43,15 +45,12 @@ public class PickUpController : MonoBehaviour
             else { CheckDirectionFacing(); }
         }
 
-        facingDirection = player.facingDirection;
-    }
+        // if (itemHolding)
+        // {
+        //     itemHolding.transform.position = holdSpot.position;
+        // }
 
-    private void checkAllDirections()
-    {
-        if(currentlyHighlighted != null)
-        {
-            pickUpItem(currentlyHighlighted);
-        }
+        facingDirection = player.facingDirection;
     }
     
     void CheckDirectionFacing()
@@ -80,8 +79,6 @@ public class PickUpController : MonoBehaviour
                 }
         }
 
-        Debug.Log("Player facing direction is : " + facingDirection);
-
         if (hit != false) { pickUpItem(hit.collider.gameObject); }
 
     }
@@ -95,10 +92,16 @@ public class PickUpController : MonoBehaviour
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
 
-            BoxCollider2D itemCollider = itemHolding.GetComponent<BoxCollider2D>();
+            itemCollider = itemHolding.GetComponent<BoxCollider2D>();
+
             if (itemCollider != null)
             {
-                itemCollider.isTrigger = true;
+                itemCollider.enabled = false;
+            }
+
+            if (itemRB != null)
+            {
+                itemRB.simulated = false;
             }
             animator.SetBool("isHolding", true);
             //StopFlashing(itemHolding);
@@ -126,13 +129,18 @@ public class PickUpController : MonoBehaviour
         }
 
         itemHolding.transform.position = transform.position + offset;
+        itemHolding.transform.position = new Vector3(Mathf.RoundToInt(itemHolding.transform.position.x), Mathf.RoundToInt(itemHolding.transform.position.y), Mathf.RoundToInt(itemHolding.transform.position.z));
+
         itemHolding.transform.parent = null;
 
-        BoxCollider2D itemCollider = itemHolding.GetComponent<BoxCollider2D>();
         if (itemCollider != null)
         {
-            itemCollider.isTrigger = false;
+            itemCollider.enabled = true;
         }
+        if (itemRB != null)
+            {
+                itemRB.simulated = true;
+            }
         itemHolding = null;
         animator.SetBool("isHolding", false);
         //Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
