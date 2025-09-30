@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         {
             GameEvents.RaiseRegionUnlocked("Meadow-2");
             GameEvents.RaiseRegionUnlocked("Lake");
-            GameEvents.RaiseRegionUnlocked("Village");
+            //GameEvents.RaiseRegionUnlocked("Village");
         }
     }
 
