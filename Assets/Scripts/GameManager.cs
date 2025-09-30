@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         GameEvents.RemoveClouds += HandleRemoveClouds;
+        GameEvents.RegionUnlocked += HandleRegionUnlocked;
     }
 
 
@@ -60,6 +62,8 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         GameEvents.RemoveClouds -= HandleRemoveClouds;
+        GameEvents.RegionUnlocked -= HandleRegionUnlocked;
+
     }
 
     void HandleRemoveClouds(GameObject cloudsToRemove)
@@ -67,14 +71,36 @@ public class GameManager : MonoBehaviour
         Destroy(cloudsToRemove);
     }
 
+    void HandleRegionUnlocked(String region)
+    {
+        switch (region)
+        {
+            case ("Meadow-2"):
+                GameEvents.RaiseRemoveClouds(meadowClouds);
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
+                return;
+            case ("Lake"):
+                GameEvents.RaiseRemoveClouds(lakeClouds);
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the south has been unlocked...");
+                return;
+
+            case ("Village"):
+                GameEvents.RaiseRemoveClouds(villageClouds);
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the east has been unlocked...");
+                return;
+            case ("Forest"):
+                GameEvents.RaiseRemoveClouds(forestClouds);
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
+                return;
+    }
+    }
+
     public void setMeadowRequirements(bool meadowRequirements)
     {
         fulfilledMeadowRequirements = meadowRequirements;
         if (fulfilledMeadowRequirements)
         {
-            GameEvents.RaiseRemoveClouds(meadowClouds);
-            GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
-
+            GameEvents.RaiseRegionUnlocked("Meadow-2");
         }
     }
 }
