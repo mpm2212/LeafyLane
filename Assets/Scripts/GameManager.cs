@@ -5,13 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    bool fulfilledMeadowRequirements;
+    bool fulfilledMeadow2Requirements;
     bool fulfilledVillageRequirements;
     bool fulfilledForestRequirements;
     bool fulfilledLakeRequirements;
 
     [Header("Cloud GameObjects")]
-    [SerializeField] GameObject meadowClouds;
+    [SerializeField] GameObject meadow2Clouds;
     [SerializeField] GameObject villageClouds;
     [SerializeField] GameObject lakeClouds;
     [SerializeField] GameObject forestClouds;
@@ -23,12 +23,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        fulfilledMeadowRequirements = false;
+        fulfilledMeadow2Requirements = false;
         fulfilledVillageRequirements = false;
         fulfilledForestRequirements = false;
         fulfilledLakeRequirements = false;
 
-        meadowClouds.SetActive(true);
+        meadow2Clouds.SetActive(true);
         villageClouds.SetActive(true);
         lakeClouds.SetActive(true);
         forestClouds.SetActive(true);
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 
     void HandleRemoveClouds(GameObject cloudsToRemove)
     {
-        Destroy(cloudsToRemove);
+        if (cloudsToRemove != null) { Destroy(cloudsToRemove); }
     }
 
     void HandleRegionUnlocked(String region)
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         switch (region)
         {
             case ("Meadow-2"):
-                GameEvents.RaiseRemoveClouds(meadowClouds);
+                GameEvents.RaiseRemoveClouds(meadow2Clouds);
                 GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
                 return;
             case ("Lake"):
@@ -97,8 +97,8 @@ public class GameManager : MonoBehaviour
 
     public void setMeadowRequirements(bool meadowRequirements)
     {
-        fulfilledMeadowRequirements = meadowRequirements;
-        if (fulfilledMeadowRequirements)
+        fulfilledMeadow2Requirements = meadowRequirements;
+        if (fulfilledMeadow2Requirements)
         {
             GameEvents.RaiseRegionUnlocked("Meadow-2");
         }
