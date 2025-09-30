@@ -53,7 +53,7 @@ public class GardenManager : MonoBehaviour
                 Debug.Log("meadow item count: " + meadowItemCount);
                 if (meadowItemCount == 2)
                 {
-                    GameManager.Instance.setMeadowRequirements(true);
+                    GameEvents.RaiseRegionUnlocked("Meadow-2");
                 }
                 return;
 

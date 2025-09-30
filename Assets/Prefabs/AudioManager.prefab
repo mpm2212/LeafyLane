@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5314237155281699471}
   - component: {fileID: 6761740100700463396}
+  - component: {fileID: 1286307287748713686}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -46,5 +47,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 0}
   sfxSource: {fileID: 0}
-  musicVolume: 1
+  musicVolume: 0.52
   sfxVolume: 1
+--- !u!114 &1286307287748713686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3157160311945755876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223b9d7f64eb947b0a08dee44003fa8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonSounds:
+  - {fileID: 8300000, guid: d8c5ccbd307a1484db37c258d1c10717, type: 3}
+  - {fileID: 8300000, guid: 02fb9220724314b248a94d2beb38a845, type: 3}
+  - {fileID: 8300000, guid: 8567bbd0e2e424c74994c6d75b1ea413, type: 3}
+  soundSlider: {fileID: 0}
+  musicSlider: {fileID: 0}
+  gameMusic: {fileID: 8300000, guid: 1aa9b31cb118543eaba397237886b563, type: 3}

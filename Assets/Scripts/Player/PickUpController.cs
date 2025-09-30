@@ -121,6 +121,7 @@ public class PickUpController : MonoBehaviour
         }
 
         itemHolding.transform.position = transform.position + offset;
+        itemHolding.transform.position = new Vector3(Mathf.RoundToInt(itemHolding.transform.position.x), Mathf.RoundToInt(itemHolding.transform.position.y), Mathf.RoundToInt(itemHolding.transform.position.z));
         itemHolding.transform.parent = null;
         if (itemHolding.GetComponent<Rigidbody2D>())
         {

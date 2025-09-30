@@ -14,6 +14,7 @@ public class GameCanvasController : MonoBehaviour
     [SerializeField] GameObject LShiftPanel;
     [SerializeField] GameObject mainMenuPanel;
     [SerializeField] GameObject settingsPanel;
+    [SerializeField] GameObject helpPanel;
     [SerializeField] GameObject regionUnlockedPanel;
     [SerializeField] TextMeshProUGUI regionUnlockedText;
 
@@ -33,6 +34,7 @@ public class GameCanvasController : MonoBehaviour
         LShiftPanel.SetActive(false);
         mainMenuPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        helpPanel.SetActive(false);
         regionUnlockedPanel.SetActive(false);
 
         hideTime = 4;
