@@ -14,7 +14,7 @@ public class PickUpController : MonoBehaviour
     private GameObject item;
     private WalkingDirection facingDirection;
     private PlayerMovement player;
-    private Vector3 offset = new Vector3(0,0,0);
+    private Vector3 offset = new Vector3(0, 0, 0);
 
     private GameObject currentlyHighlighted;
     RaycastHit2D hit;
@@ -52,7 +52,7 @@ public class PickUpController : MonoBehaviour
 
         facingDirection = player.facingDirection;
     }
-    
+
     void CheckDirectionFacing()
     {
         switch (facingDirection)
@@ -89,10 +89,11 @@ public class PickUpController : MonoBehaviour
         if (item != null)
         {
             itemHolding = item;
-            itemHolding.transform.position = holdSpot.position;
-            itemHolding.transform.parent = transform;
-
+            itemRB = item.GetComponent<Rigidbody2D>();
             itemCollider = itemHolding.GetComponent<BoxCollider2D>();
+
+            //itemHolding.transform.position = holdSpot.position;
+            itemHolding.transform.parent = transform;
 
             if (itemCollider != null)
             {
@@ -101,7 +102,7 @@ public class PickUpController : MonoBehaviour
 
             if (itemRB != null)
             {
-                itemRB.simulated = false;
+                //itemRB.simulated = false;
             }
             animator.SetBool("isHolding", true);
             //StopFlashing(itemHolding);
@@ -138,14 +139,23 @@ public class PickUpController : MonoBehaviour
             itemCollider.enabled = true;
         }
         if (itemRB != null)
-            {
-                itemRB.simulated = true;
-            }
+        {
+            itemRB.simulated = true;
+        }
         itemHolding = null;
+        itemRB = null;
         animator.SetBool("isHolding", false);
         //Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
 
     }
 
- 
+
+    void FixedUpdate()
+    {
+        if (itemRB != null)
+        {
+            itemRB.MovePosition(holdSpot.transform.position);
+
+        }
+    }
 }
