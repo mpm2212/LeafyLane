@@ -9,18 +9,23 @@ using UnityEngine.InputSystem;
 
 public class GameCanvasController : MonoBehaviour
 {
-    [Header("Panels")]
+    [Header("UI Panels")]
     [SerializeField] GameObject WASDPanel;
     [SerializeField] GameObject LShiftPanel;
     [SerializeField] GameObject mainMenuPanel;
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject helpPanel;
     [SerializeField] GameObject regionUnlockedPanel;
+    [SerializeField] GameObject flowersPanel;
+    [SerializeField] GameObject flower1;
+    [SerializeField] GameObject flower2;
+    Image flower1Image;
+    Image flower2Image;
     [SerializeField] TextMeshProUGUI regionUnlockedText;
 
     Coroutine WASDTimer;
 
-    [SerializeField] int hideTime;
+    int hideTime;
 
     public static GameCanvasController Instance { get; private set; }
 
@@ -36,6 +41,13 @@ public class GameCanvasController : MonoBehaviour
         settingsPanel.SetActive(false);
         helpPanel.SetActive(false);
         regionUnlockedPanel.SetActive(false);
+        flowersPanel.SetActive(true);
+
+        flower1Image = flower1.GetComponent<Image>();
+        flower2Image = flower2.GetComponent<Image>();
+
+        flower1Image.color = Color.black;
+        flower2Image.color = Color.black;
 
         hideTime = 4;
 
@@ -45,6 +57,52 @@ public class GameCanvasController : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void OnEnable()
+    {
+        GameEvents.RegionUnlocked += HandleRegionUnlocked;
+        GardenEvents.FlowerPlacedEvent += HandleFlowerPlacedUI;
+    }
+
+    void OnDisable()
+    {
+        GameEvents.RegionUnlocked -= HandleRegionUnlocked;
+        GardenEvents.FlowerPlacedEvent -= HandleFlowerPlacedUI;
+
+    }
+
+    void HandleRegionUnlocked(String region)
+    {
+        if (region == "Meadow-2") { flowersPanel.SetActive(false); }
+    }
+
+    void HandleFlowerPlacedUI(int totalNumFlowers, bool more)
+    {
+        Debug.Log("in flower placed ui receiver");
+        if (more)
+        {
+            if (flower1Image.color == Color.black)
+            {
+                flower1Image.color = Color.white;
+            }
+            else if (flower2Image.color == Color.black)
+            {
+                flower2Image.color = Color.white;
+            }
+        }
+
+        else
+        {
+            if (flower2Image.color == Color.white)
+            {
+                flower2Image.color = Color.black;
+            }
+            else if (flower1Image.color == Color.white)
+            {
+                flower1Image.color= Color.black;
+            }
+        }
     }
 
     void GameCanvasControllerSingleton()

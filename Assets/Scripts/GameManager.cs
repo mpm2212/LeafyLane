@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
         {
             case ("Meadow-2"):
                 GameEvents.RaiseRemoveClouds(meadow2Clouds);
-                GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the east has been unlocked...");
                 return;
             case ("Lake"):
             case (""):
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
             case ("Village"):
                 GameEvents.RaiseRemoveClouds(villageClouds);
-                GameCanvasController.Instance.ShowRegionUnlocked("A region to the east has been unlocked...");
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
                 return;
             case ("Forest"):
                 GameEvents.RaiseRemoveClouds(forestClouds);

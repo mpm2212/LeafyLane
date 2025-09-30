@@ -86,7 +86,7 @@ public class PickUpController : MonoBehaviour
         if (item != null)
         {
             itemHolding = item;
-            Debug.Log("Item Holding: " + itemHolding.name);
+            //Debug.Log("Item Holding: " + itemHolding.name);
             itemHolding.transform.position = holdSpot.position;
             itemHolding.transform.parent = transform;
             if (itemHolding.GetComponent<Rigidbody2D>())
@@ -103,7 +103,7 @@ public class PickUpController : MonoBehaviour
     private void putDownObject()
     {
 
-        Debug.Log("Putting Down Object");
+        //Debug.Log("Putting Down Object");
         switch (facingDirection)
         {
             case WalkingDirection.Up:
