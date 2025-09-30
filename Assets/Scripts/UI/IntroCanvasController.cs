@@ -17,6 +17,9 @@ public class IntroCanvasController : MonoBehaviour
     [SerializeField] Sprite nuttyIdle;
     [SerializeField] Sprite nuttyExcited;
     [SerializeField] Sprite nuttyCalm;
+    [SerializeField] Sprite[] backgroundSprites;
+    [SerializeField] GameObject backgroundImageGO;
+    Image bgImage;
     bool UICoroutineRunning;
 
     void Start()
@@ -24,6 +27,7 @@ public class IntroCanvasController : MonoBehaviour
         nuttyImage = nutty.GetComponent<Image>();
         StartCoroutine(introText());
         spaceToContinue.SetActive(true);
+        bgImage = backgroundImageGO.GetComponent<Image>();
     }
 
     void Update()

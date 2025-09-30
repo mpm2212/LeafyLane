@@ -37,7 +37,7 @@ public class VillageManager : MonoBehaviour
         numLampsLit--;
         Debug.Log("num lamps lit: " + numLampsLit);
 
-        if (numLampsLit == 0)
+        if (numLampsLit == -1)
         {
             GameEvents.RaiseRegionUnlocked("Forest");
         }

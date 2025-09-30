@@ -9,6 +9,10 @@ public static class GameEvents
     public static event Action<int, bool> FlowerPlacedEvent;
     public static event Action<int> LightbulbPickedUpEvent;
     public static event Action<int> LightbulbPlacedEvent;
+    public static event Action<GameObject> TalkingToFreddyEvent;
+    public static event Action<GameObject> FoundBobEvent;
+    public static event Action<GameObject> DidntFindBobEvent;
+    public static event Action<GameObject> PlayerEnteredForestEvent;
 
 
 
@@ -19,5 +23,9 @@ public static class GameEvents
     public static void RaiseFlowerPlacedEvent(int totalNumFlowers, bool more) => FlowerPlacedEvent?.Invoke(totalNumFlowers, more);
     public static void RaiseLightbulbPickedUpEvent(int numLightbulbs) => LightbulbPickedUpEvent?.Invoke(numLightbulbs);
     public static void RaiseLightBulbPlacedEvent(int numLightbulbs) => LightbulbPlacedEvent?.Invoke(numLightbulbs);
+    public static void RaiseTalkingToFreddyEvent(GameObject obj) => TalkingToFreddyEvent?.Invoke(obj);
+    public static void RaiseFoundBobEvent(GameObject obj) => FoundBobEvent?.Invoke(obj);
+    public static void RaiseDidntFindBobEvent(GameObject obj) => DidntFindBobEvent?.Invoke(obj);
+    public static void RaisePlayerEnteredForestEvent(GameObject obj) => PlayerEnteredForestEvent?.Invoke(obj);
 
 }

@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BobFollowPlayer : MonoBehaviour
@@ -8,16 +10,20 @@ public class BobFollowPlayer : MonoBehaviour
     [SerializeField] private float triggerDistance = 2.0f;
     [SerializeField] GameObject[] bobSpawnPoints;
     [SerializeField] private int pauseDuration = 5;
-    [SerializeField] private float rescueTime = 30f;
+    [SerializeField] private float rescueTimer = 30f;
 
     private float timer;
     private bool isRescueActive = false;
-    private bool MissionComplete = false;
+    private bool missionComplete = false;
+
+    bool villageTriggered;
 
     private GameObject player;
     private bool canMove = true;
     private Animator animator;
     private Vector3 lakeCenter;
+    [SerializeField] GameObject bobTimerText;
+    TextMeshProUGUI timerText;
     Rigidbody2D bobRB;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +32,8 @@ public class BobFollowPlayer : MonoBehaviour
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         bobRB = GetComponent<Rigidbody2D>();
+        villageTriggered = false;
+        if (bobTimerText != null){ timerText = bobTimerText.GetComponent<TextMeshProUGUI>(); bobTimerText.SetActive(false); }
 
     }
 
@@ -41,13 +49,22 @@ public class BobFollowPlayer : MonoBehaviour
             //bobRB.MoveTowards
         }
 
-        if(isRescueActive && MissionComplete == false){
+        if (isRescueActive && missionComplete == false)
+        {
             timer -= Time.deltaTime;
-            if(timer <= 0){
+            timerText.text = "Time left: " + (int)timer;
+            if (timer <= 0)
+            {
                 RescueFailed();
             }
         }
+        if (missionComplete && !villageTriggered && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
+        {
+            GameEvents.RaiseRegionUnlocked("Village");
+            villageTriggered = true;
+        }
     }
+
 
     void chooseSpawnLocation(){
         int index = Random.Range(0, bobSpawnPoints.Length);
@@ -62,16 +79,17 @@ public class BobFollowPlayer : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player") && !isRescueActive){
+        if (other.CompareTag("Player") && !isRescueActive && !missionComplete)
+        {
             //Debug.Log("Bob has been found! start the timer");
-            timer = rescueTime;
+            timer = rescueTimer;
             isRescueActive = true;
+            bobTimerText.SetActive(true);
         }
 
-        if(other.gameObject.tag == "Lake")
+        if(other.gameObject.tag == "Lake" && !missionComplete)
         {
             EnteredLake();
-            
         }
     }
 
@@ -96,18 +114,22 @@ public class BobFollowPlayer : MonoBehaviour
     void ResumeMovement()
     {
         canMove = true;
-    } 
+    }
 
     void RescueCompleted()
     {
         //Debug.Log("Bob has been brought back");
-        MissionComplete = true;
+        missionComplete = true;
         isRescueActive = false;
+        bobTimerText.SetActive(false);
+        GameEvents.RaiseFoundBobEvent(this.gameObject);
     }
 
-    void RescueFailed(){
-        //Debug.Log("You failed");
+    void RescueFailed()
+    {
         isRescueActive = false;
         chooseSpawnLocation();
+        timer = rescueTimer;
+        GameEvents.RaiseDidntFindBobEvent(this.gameObject);
     }
 }

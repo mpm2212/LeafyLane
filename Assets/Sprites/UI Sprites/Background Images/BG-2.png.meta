@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c9363e1cb37d14a3abaf55ae11df31ec
+guid: 1c3374646b9e649b99e5ca52b349031d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7016704622030443934
-    second: Flower Pot 4 - RED_0
+      213: 3379343958528188823
+    second: "Screenshot 2025-09-30 at 11.27.43\u202FPM_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Flower Pot 4 - RED_0
+      name: "Screenshot 2025-09-30 at 11.27.43\u202FPM_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 19
-        height: 13
+        width: 2920
+        height: 1392
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 26aa8068258af9e90800000000000000
-      internalID: -7016704622030443934
+      spriteID: 7916fedfc67d5ee20800000000000000
+      internalID: 3379343958528188823
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Flower Pot 4 - RED_0: -7016704622030443934
+      "Screenshot 2025-09-30 at 11.27.43\u202FPM_0": 3379343958528188823
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
