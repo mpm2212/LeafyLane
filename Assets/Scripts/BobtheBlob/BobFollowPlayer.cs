@@ -12,6 +12,7 @@ public class BobFollowPlayer : MonoBehaviour
 
     private float timer;
     private bool isRescueActive = false;
+    private bool MissionComplete = false;
 
     private GameObject player;
     private bool canMove = true;
@@ -40,7 +41,7 @@ public class BobFollowPlayer : MonoBehaviour
             //bobRB.MoveTowards
         }
 
-        if(isRescueActive){
+        if(isRescueActive && MissionComplete == false){
             timer -= Time.deltaTime;
             if(timer <= 0){
                 RescueFailed();
@@ -50,12 +51,10 @@ public class BobFollowPlayer : MonoBehaviour
 
     void chooseSpawnLocation(){
         int index = Random.Range(0, bobSpawnPoints.Length);
-        Debug.Log("Spawned at Index: " +index);
         GameObject spawnPos = bobSpawnPoints[index];
 
         if (spawnPos != null)
         {
-            Debug.Log("Bob is being moved");
             transform.position = spawnPos.transform.position;
         }
 
@@ -69,15 +68,16 @@ public class BobFollowPlayer : MonoBehaviour
             isRescueActive = true;
         }
 
-        // if(other.gameObject.tag == "Lake")
-        // {
+        if(other.gameObject.tag == "Lake")
+        {
+            EnteredLake();
             
-        // }
+        }
     }
 
     public void EnteredLake()
     {
-        Debug.Log("entered lake");
+        //Debug.Log("entered lake");
         canMove = false;
         animator.SetBool("inLake", true);
         Invoke(nameof(ResumeMovement), pauseDuration);
@@ -100,11 +100,13 @@ public class BobFollowPlayer : MonoBehaviour
 
     void RescueCompleted()
     {
-        Debug.Log("Bob has been brought back");
+        //Debug.Log("Bob has been brought back");
+        MissionComplete = true;
+        isRescueActive = false;
     }
 
     void RescueFailed(){
-        Debug.Log("You failed");
+        //Debug.Log("You failed");
         isRescueActive = false;
         chooseSpawnLocation();
     }
