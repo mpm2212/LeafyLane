@@ -21,6 +21,7 @@ public class GameCanvasController : MonoBehaviour
     [SerializeField] GameObject flower2;
     [SerializeField] GameObject lightbulbPanel;
     [SerializeField] TextMeshProUGUI lightbulbText;
+    [SerializeField] TextMeshProUGUI lampText;
     Image flower1Image;
     Image flower2Image;
     [SerializeField] TextMeshProUGUI regionUnlockedText;
@@ -54,21 +55,20 @@ public class GameCanvasController : MonoBehaviour
         flower2Image.color = Color.black;
 
         numLightbulbsCollected = 0;
+        UpdateLampText(VillageManager.Instance.GetNumLampsLeft());
 
         hideTime = 4;
 
         WASDTimer = StartCoroutine(KeyExplanationTimer());
     }
 
-    void Update()
-    {
-
-    }
-
     void OnEnable()
     {
         GameEvents.RegionUnlockedEvent += HandleRegionUnlocked;
         GameEvents.FlowerPlacedEvent += HandleFlowerPlacedUI;
+        GameEvents.LightbulbPickedUpEvent += HandleLightbulbPickedUpUI;
+        GameEvents.LightbulbPlacedEvent += HandleLightbulbPlacedEvent;
+
     }
 
     void OnDisable()
@@ -76,7 +76,7 @@ public class GameCanvasController : MonoBehaviour
         GameEvents.RegionUnlockedEvent -= HandleRegionUnlocked;
         GameEvents.FlowerPlacedEvent -= HandleFlowerPlacedUI;
         GameEvents.LightbulbPickedUpEvent -= HandleLightbulbPickedUpUI;
-
+        GameEvents.LightbulbPlacedEvent -= HandleLightbulbPlacedEvent;
 
     }
 
@@ -169,9 +169,35 @@ public class GameCanvasController : MonoBehaviour
         StartCoroutine(ShowPanelForSeconds(regionUnlockedPanel, hideTime));
     }
 
-    void HandleLightbulbPickedUpUI(GameObject obj)
+    void HandleLightbulbPickedUpUI(int i)
+    {
+        numLightbulbsCollected++;
+        UpdateLightbulbText(numLightbulbsCollected);
+        Debug.Log("updated lightbulb text: " + numLightbulbsCollected);
+    }
+
+    void HandleLightbulbPlacedEvent(int i)
+    {
+        numLightbulbsCollected--;
+        UpdateLightbulbText(numLightbulbsCollected);
+
+        UpdateLampText(VillageManager.Instance.GetNumLampsLeft());
+
+    }
+
+    public int GetLightbulbsCollected()
+    {
+        return numLightbulbsCollected;
+    }
+
+    public void UpdateLightbulbText(int numLightbulbs)
     {
         lightbulbText.text = numLightbulbsCollected.ToString();
+    }
+
+    void UpdateLampText(int numLamp)
+    {
+        lampText.text = numLamp.ToString();
     }
 
 
