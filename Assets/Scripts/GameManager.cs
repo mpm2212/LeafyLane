@@ -5,10 +5,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    bool fulfilledMeadow2Requirements;
-    bool fulfilledVillageRequirements;
-    bool fulfilledForestRequirements;
-    bool fulfilledLakeRequirements;
+    bool meadow2Unlocked;
+    bool villageUnlocked;
+    bool forestUnlocked;
+    bool lakeUnlocked;
 
     [Header("Cloud GameObjects")]
     [SerializeField] GameObject meadow2Clouds;
@@ -23,10 +23,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        fulfilledMeadow2Requirements = false;
-        fulfilledVillageRequirements = false;
-        fulfilledForestRequirements = false;
-        fulfilledLakeRequirements = false;
+        meadow2Unlocked = false;
+        villageUnlocked = false;
+        forestUnlocked = false;
+        lakeUnlocked = false;
 
         meadow2Clouds.SetActive(true);
         villageClouds.SetActive(true);
@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
                 GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
                 return;
             case ("Lake"):
+            case (""):
                 GameEvents.RaiseRemoveClouds(lakeClouds);
                 GameCanvasController.Instance.ShowRegionUnlocked("A region to the south has been unlocked...");
                 return;
@@ -95,12 +96,4 @@ public class GameManager : MonoBehaviour
     }
     }
 
-    public void setMeadowRequirements(bool meadowRequirements)
-    {
-        fulfilledMeadow2Requirements = meadowRequirements;
-        if (fulfilledMeadow2Requirements)
-        {
-            GameEvents.RaiseRegionUnlocked("Meadow-2");
-        }
-    }
 }
