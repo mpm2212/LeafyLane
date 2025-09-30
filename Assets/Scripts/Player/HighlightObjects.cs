@@ -8,10 +8,11 @@ public class HighlightObjects : MonoBehaviour
     private Color originalColor;
     private Coroutine flashRoutine;
     private SpriteRenderer sr;
-    int checkRange = 2;
     private GameObject item;
+
     [SerializeField] private Color flashColor = Color.blue;
     [SerializeField] private float flashSpeed = 0.5f;
+    [SerializeField] private int checkRange = 2;
 
     [SerializeField] LayerMask pickupMask;
     Collider2D[] nearbyItems;
@@ -24,7 +25,7 @@ public class HighlightObjects : MonoBehaviour
 
     void Update()
     {
-        GetNearbyItems();
+        //GetNearbyItems();
         HighlightNearbyItems();
     }
 
@@ -33,44 +34,32 @@ public class HighlightObjects : MonoBehaviour
         nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
     }
 
-    void CheckForClosestItem()
+    void HighlightNearbyItems()
     {
+        nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
         float closestDistance = Mathf.Infinity;
-
-        foreach (var itemCollider in nearbyItems)
-        {
+        foreach(Collider2D itemCollider in nearbyItems ){
             item = itemCollider.gameObject;
-
+            Debug.Log("Item: " + itemCollider.name);
             float distance = Vector2.Distance(transform.position, item.transform.position);
-
             if (distance < closestDistance)
             {
                 closestDistance = distance;
                 newHighlighted = item;
             }
         }
-    }
 
-    private void HighlightNearbyItems()
-    {
-        //newHighlighted = null;
-
-        CheckForClosestItem();
-
-            if (currentlyHighlighted != null && currentlyHighlighted != newHighlighted)
-            {
-                //Resetting highlight
+        if(newHighlighted != currentlyHighlighted){
+            if(currentlyHighlighted != null){StopFlashing(currentlyHighlighted); }
+            if(newHighlighted != null) { StartFlashing(newHighlighted); }
+            currentlyHighlighted = newHighlighted;
+        }
+            if(closestDistance > checkRange){
+                Debug.Log("Closest Dist > 2");
                 StopFlashing(currentlyHighlighted);
                 currentlyHighlighted = null;
-            }
-
-            if (newHighlighted != null && currentlyHighlighted != newHighlighted)
-            {
-                StartFlashing(newHighlighted);
-                currentlyHighlighted = newHighlighted;
-            }
-        }
-
+            }   
+    }
 
 
     public void StartFlashing(GameObject item){
@@ -81,13 +70,14 @@ public class HighlightObjects : MonoBehaviour
     }
 
     public void StopFlashing(GameObject item){
-        sr = item.GetComponent<SpriteRenderer>();
-        if(flashRoutine != null){
+        if (item == null) return;
+        sr = item.GetComponent<SpriteRenderer>(); 
+        if(flashRoutine != null)
+        {
             StopCoroutine(flashRoutine);
             sr.color = originalColor;
             flashRoutine = null;
         }
-
         sr.color = originalColor;
     }
 
