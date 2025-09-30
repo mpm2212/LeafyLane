@@ -17,12 +17,12 @@ public class Meadow2Manager : MonoBehaviour
 
     void OnEnable()
     {
-        GameEvents.RockPlacedCorrectly += HandleRockPlacedCorrectly;
+        GameEvents.RockPlacedCorrectlyEvent += HandleRockPlacedCorrectly;
     }
 
     void OnDisable()
     {
-        GameEvents.RockPlacedCorrectly -= HandleRockPlacedCorrectly;
+        GameEvents.RockPlacedCorrectlyEvent -= HandleRockPlacedCorrectly;
 
     }
 

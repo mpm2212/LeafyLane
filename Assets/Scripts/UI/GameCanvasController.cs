@@ -19,6 +19,8 @@ public class GameCanvasController : MonoBehaviour
     [SerializeField] GameObject flowersPanel;
     [SerializeField] GameObject flower1;
     [SerializeField] GameObject flower2;
+    [SerializeField] GameObject lightbulbPanel;
+    [SerializeField] TextMeshProUGUI lightbulbText;
     Image flower1Image;
     Image flower2Image;
     [SerializeField] TextMeshProUGUI regionUnlockedText;
@@ -26,6 +28,7 @@ public class GameCanvasController : MonoBehaviour
     Coroutine WASDTimer;
 
     int hideTime;
+    int numLightbulbsCollected;
 
     public static GameCanvasController Instance { get; private set; }
 
@@ -42,12 +45,15 @@ public class GameCanvasController : MonoBehaviour
         helpPanel.SetActive(false);
         regionUnlockedPanel.SetActive(false);
         flowersPanel.SetActive(true);
+        lightbulbPanel.SetActive(false);
 
         flower1Image = flower1.GetComponent<Image>();
         flower2Image = flower2.GetComponent<Image>();
 
         flower1Image.color = Color.black;
         flower2Image.color = Color.black;
+
+        numLightbulbsCollected = 0;
 
         hideTime = 4;
 
@@ -61,20 +67,23 @@ public class GameCanvasController : MonoBehaviour
 
     void OnEnable()
     {
-        GameEvents.RegionUnlocked += HandleRegionUnlocked;
-        GardenEvents.FlowerPlacedEvent += HandleFlowerPlacedUI;
+        GameEvents.RegionUnlockedEvent += HandleRegionUnlocked;
+        GameEvents.FlowerPlacedEvent += HandleFlowerPlacedUI;
     }
 
     void OnDisable()
     {
-        GameEvents.RegionUnlocked -= HandleRegionUnlocked;
-        GardenEvents.FlowerPlacedEvent -= HandleFlowerPlacedUI;
+        GameEvents.RegionUnlockedEvent -= HandleRegionUnlocked;
+        GameEvents.FlowerPlacedEvent -= HandleFlowerPlacedUI;
+        GameEvents.LightbulbPickedUpEvent -= HandleLightbulbPickedUpUI;
+
 
     }
 
     void HandleRegionUnlocked(String region)
     {
         if (region == "Meadow-2") { flowersPanel.SetActive(false); }
+        if (region == "Village") { lightbulbPanel.SetActive(true); }
     }
 
     void HandleFlowerPlacedUI(int totalNumFlowers, bool more)
@@ -100,7 +109,7 @@ public class GameCanvasController : MonoBehaviour
             }
             else if (flower1Image.color == Color.white)
             {
-                flower1Image.color= Color.black;
+                flower1Image.color = Color.black;
             }
         }
     }
@@ -160,6 +169,10 @@ public class GameCanvasController : MonoBehaviour
         StartCoroutine(ShowPanelForSeconds(regionUnlockedPanel, hideTime));
     }
 
+    void HandleLightbulbPickedUpUI(GameObject obj)
+    {
+        lightbulbText.text = numLightbulbsCollected.ToString();
+    }
 
 
 }
