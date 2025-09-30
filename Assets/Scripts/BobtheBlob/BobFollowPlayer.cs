@@ -70,11 +70,5 @@ public class BobFollowPlayer : MonoBehaviour
     void ResumeMovement()
     {
         canMove = true;
-    }
-
-    //after you bring him back to the lake, it raises the event that the village has been unlocked
-    //GameEvent.raise(Village)
-    //when he gets there, make him do something?
-
-    
+    }   
 }

@@ -7,6 +7,7 @@ public class PickUpController : MonoBehaviour
     [SerializeField] private float checkRange = 1.0f;
     [SerializeField] public Transform holdSpot;
     [SerializeField] public LayerMask pickupMask;
+    [SerializeField] public GameObject placementPreviewPrefab;
 
     Animator animator;
 
@@ -16,8 +17,8 @@ public class PickUpController : MonoBehaviour
     private PlayerMovement player;
     private Vector3 offset = new Vector3(0,0,0);
     private HighlightObjects highlighter;
-
     private GameObject currentlyHighlighted;
+    private GameObject activePreview;
 
 
     void Start()
@@ -35,6 +36,10 @@ public class PickUpController : MonoBehaviour
 
     void Update()
     {
+        if(itemHolding){
+            UpdatePlacementPreview();
+        }
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (itemHolding)
@@ -95,7 +100,7 @@ public class PickUpController : MonoBehaviour
             }
             animator.SetBool("isHolding", true);
             highlighter.StopFlashing(itemHolding);
-            //currentlyHighlighted = null;
+            activePreview = Instantiate(placementPreviewPrefab);
         }
 
     }
@@ -127,9 +132,34 @@ public class PickUpController : MonoBehaviour
         {
             itemHolding.GetComponent<Rigidbody2D>().simulated = true;
         }
+        if(activePreview != null){
+            Destroy(activePreview);
+            activePreview = null;
+        }
         itemHolding = null;
         animator.SetBool("isHolding", false);
         //Debug.Log("set bool isHolding to be " + animator.GetBool("isHolding"));
 
+    }
+
+    private void UpdatePlacementPreview()
+    {
+        Debug.Log("Updating Placement");
+        Vector3 previewPos = transform.position;
+        switch(facingDirection)
+        {
+            case WalkingDirection.Up: previewPos += Vector3.up; break;
+            case WalkingDirection.Down: previewPos += Vector3.down; break;
+            case WalkingDirection.Right: previewPos += Vector3.right; break;
+            case WalkingDirection.Left: previewPos += Vector3.left; break;
+        }
+
+        previewPos = new Vector3(
+            Mathf.RoundToInt(previewPos.x),
+            Mathf.RoundToInt(previewPos.y),
+            Mathf.RoundToInt(previewPos.z)
+        );
+
+        activePreview.transform.position = previewPos;
     }
 }
