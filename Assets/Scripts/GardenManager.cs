@@ -30,7 +30,7 @@ public class GardenManager : MonoBehaviour
     void HandleFlowerPlaced(int totalNumFlowers, bool more)
     {
         if (more) { meadowItemCount++; }
-        else{ meadowItemCount--; }
+        else { meadowItemCount--; }
     }
 
     void GardenManagerSingleton()
@@ -49,8 +49,8 @@ public class GardenManager : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         string otherTag = other.tag;
-        Debug.Log("other tag: " + otherTag);
-        
+        //Debug.Log("other tag: " + otherTag);
+
 
         switch (otherTag)
         {
@@ -86,11 +86,41 @@ public class GardenManager : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         string otherTag = other.tag;
-        if (otherTag == "Meadow")
+
+        switch (otherTag)
         {
-            GameEvents.RaiseFlowerPlacedEvent(meadowItemCount, false);
-            Debug.Log("meadow item count: " + meadowItemCount);
+            case "Meadow":
+                GameEvents.RaiseFlowerPlacedEvent(meadowItemCount, false);
+                return;
+
+            case ("Meadow-2"):
+                meadow2ItemCount--;
+                return;
+
+            case ("Village"):
+                villageItemCount--;
+                return;
+
+            case ("Lake"):
+                lakeItemCount--;
+                return;
+
+            case ("Forest"):
+                forestItemCount--;
+                return;
         }
+
+    }
+
+    bool CheckIfItemFromEachRegion()
+    {
+        bool itemFromEachRegion = false;
+        if (meadowItemCount >= 1 && meadow2ItemCount >= 1 && lakeItemCount >= 1 && forestItemCount >= 1 && villageItemCount >= 1)
+        {
+            itemFromEachRegion = true;
+        }
+
+        return itemFromEachRegion;
     }
 
 

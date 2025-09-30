@@ -17,12 +17,14 @@ public class BobFollowPlayer : MonoBehaviour
     private bool canMove = true;
     private Animator animator;
     private Vector3 lakeCenter;
+    Rigidbody2D bobRB;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         chooseSpawnLocation();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
+        bobRB = GetComponent<Rigidbody2D>();
 
     }
 
@@ -31,9 +33,11 @@ public class BobFollowPlayer : MonoBehaviour
     {
         if (!player) return;
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        if(distance < triggerDistance && distance > distance2player)
-        { 
-               transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+        if (distance < triggerDistance && distance > distance2player)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            //bobRB.MoveTowards
         }
 
         if(isRescueActive){
@@ -65,15 +69,20 @@ public class BobFollowPlayer : MonoBehaviour
             isRescueActive = true;
         }
 
-        if(other.gameObject.tag == "Lake"){
-            GameEvents.RaiseRegionUnlocked("Village");
-            canMove = false;
-            Debug.Log("Bob is in Lake");
-            animator.SetBool("inLake", true);
-            Invoke(nameof(ResumeMovement), pauseDuration);
+        // if(other.gameObject.tag == "Lake")
+        // {
+            
+        // }
+    }
 
-            RescueCompleted();
-        }
+    public void EnteredLake()
+    {
+        Debug.Log("entered lake");
+        canMove = false;
+        animator.SetBool("inLake", true);
+        Invoke(nameof(ResumeMovement), pauseDuration);
+
+        RescueCompleted();
     }
 
     void OnTriggerExit2D(Collider2D other)

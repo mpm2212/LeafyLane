@@ -36,7 +36,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
+        if (Input.GetKey(KeyCode.L))
+        {
+            GameEvents.RaiseRegionUnlocked("Meadow-2");
+            GameEvents.RaiseRegionUnlocked("Lake");
+            //GameEvents.RaiseRegionUnlocked("Village");
+        }
     }
 
     void GameManagerSingleton()
@@ -77,12 +82,12 @@ public class GameManager : MonoBehaviour
         {
             case ("Meadow-2"):
                 GameEvents.RaiseRemoveClouds(meadow2Clouds);
-                GameCanvasController.Instance.ShowRegionUnlocked("A region to the east has been unlocked...");
+                GameCanvasController.Instance.ShowRegionUnlocked("A region to the southeast has been unlocked...");
                 return;
             case ("Lake"):
             case (""):
                 GameEvents.RaiseRemoveClouds(lakeClouds);
-                GameCanvasController.Instance.ShowRegionUnlocked("A region to the south has been unlocked...");
+                GameCanvasController.Instance.ShowRegionUnlocked("A region in the center has been unlocked...");
                 return;
 
             case ("Village"):
@@ -93,7 +98,7 @@ public class GameManager : MonoBehaviour
                 GameEvents.RaiseRemoveClouds(forestClouds);
                 GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
                 return;
-    }
+        }
     }
 
 }
