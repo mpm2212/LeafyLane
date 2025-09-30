@@ -18,7 +18,6 @@ public class AudioManager : MonoBehaviour
         AudioManagerSingleton();
         MakeMusicSourceLoopable();
         ApplyVolumes();
-        DontDestroyOnLoad(this.gameObject);
     }
 
     void AudioManagerSingleton()

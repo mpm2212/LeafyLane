@@ -17,14 +17,20 @@ public class GardenManager : MonoBehaviour
         GardenManagerSingleton();
     }
 
-    void Start()
+    void OnEnable()
     {
-
+        GardenEvents.FlowerPlacedEvent += HandleFlowerPlaced;
     }
 
-    void Update()
+    void OnDisable()
     {
+        GardenEvents.FlowerPlacedEvent -= HandleFlowerPlaced;
+    }
 
+    void HandleFlowerPlaced(int totalNumFlowers, bool more)
+    {
+        if (more) { meadowItemCount++; }
+        else{ meadowItemCount--; }
     }
 
     void GardenManagerSingleton()
@@ -49,7 +55,7 @@ public class GardenManager : MonoBehaviour
         switch (otherTag)
         {
             case ("Meadow"):
-                meadowItemCount++;
+                GardenEvents.RaiseFlowerPlacedEvent(meadowItemCount, true);
                 Debug.Log("meadow item count: " + meadowItemCount);
                 if (meadowItemCount == 2)
                 {
@@ -82,7 +88,7 @@ public class GardenManager : MonoBehaviour
         string otherTag = other.tag;
         if (otherTag == "Meadow")
         {
-            meadowItemCount--;
+            GardenEvents.RaiseFlowerPlacedEvent(meadowItemCount, false);
             Debug.Log("meadow item count: " + meadowItemCount);
         }
     }

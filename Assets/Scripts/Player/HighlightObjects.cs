@@ -40,7 +40,7 @@ public class HighlightObjects : MonoBehaviour
         float closestDistance = Mathf.Infinity;
         foreach(Collider2D itemCollider in nearbyItems ){
             item = itemCollider.gameObject;
-            Debug.Log("Item: " + itemCollider.name);
+            //Debug.Log("Item: " + itemCollider.name);
             float distance = Vector2.Distance(transform.position, item.transform.position);
             if (distance < closestDistance)
             {
@@ -55,7 +55,7 @@ public class HighlightObjects : MonoBehaviour
             currentlyHighlighted = newHighlighted;
         }
             if(closestDistance > checkRange){
-                Debug.Log("Closest Dist > 2");
+                //Debug.Log("Closest Dist > 2");
                 StopFlashing(currentlyHighlighted);
                 currentlyHighlighted = null;
             }   
