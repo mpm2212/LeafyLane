@@ -53,16 +53,16 @@ public class GameManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameEvents.RemoveClouds += HandleRemoveClouds;
-        GameEvents.RegionUnlocked += HandleRegionUnlocked;
+        GameEvents.RemoveCloudsEvent += HandleRemoveClouds;
+        GameEvents.RegionUnlockedEvent += HandleRegionUnlocked;
     }
 
 
 
     void OnDisable()
     {
-        GameEvents.RemoveClouds -= HandleRemoveClouds;
-        GameEvents.RegionUnlocked -= HandleRegionUnlocked;
+        GameEvents.RemoveCloudsEvent -= HandleRemoveClouds;
+        GameEvents.RegionUnlockedEvent -= HandleRegionUnlocked;
 
     }
 
