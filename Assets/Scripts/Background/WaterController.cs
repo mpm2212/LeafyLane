@@ -22,13 +22,13 @@ public class WaterController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.CompareTag("Player")){
-            Debug.Log("Hit Water -> Push Player");
+            //Debug.Log("Hit Water -> Push Player");
             Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
             Vector2 pushDir = other.contacts[0].normal;
 
 
             rb.AddForce(Vector2.up * pushForce, ForceMode2D.Impulse);
-            Debug.Log("Player pos after: " + rb.position);
+            //Debug.Log("Player pos after: " + rb.position);
         }
     }
 
