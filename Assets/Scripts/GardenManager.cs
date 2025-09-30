@@ -44,12 +44,17 @@ public class GardenManager : MonoBehaviour
     {
         string otherTag = other.tag;
         Debug.Log("other tag: " + otherTag);
+        
 
         switch (otherTag)
         {
             case ("Meadow"):
                 meadowItemCount++;
                 Debug.Log("meadow item count: " + meadowItemCount);
+                if (meadowItemCount == 2)
+                {
+                    GameManager.Instance.setMeadowRequirements(true);
+                }
                 return;
 
             case ("Meadow-2"):
@@ -67,6 +72,7 @@ public class GardenManager : MonoBehaviour
             case ("Forest"):
                 forestItemCount++;
                 return;
+
         }
 
     }
@@ -77,7 +83,7 @@ public class GardenManager : MonoBehaviour
         if (otherTag == "Meadow")
         {
             meadowItemCount--;
-            Debug.Log(meadowItemCount);
+            Debug.Log("meadow item count: " + meadowItemCount);
         }
     }
 

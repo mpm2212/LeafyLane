@@ -57,6 +57,7 @@ public class PickUpController : MonoBehaviour
     
     void CheckDirectionFacing()
     {
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
 
         if(hits.Length > 0){

@@ -16,16 +16,13 @@ public class CanvasAudio : MonoBehaviour
 
     void Start()
     {
-        if (soundSlider != null) { soundSlider.value = 1f; }
-        if (musicSlider != null) { musicSlider.value = 1f; }
+        if (soundSlider != null) { soundSlider.value = 1f; sfxVolume = soundSlider.value;}
+        if (musicSlider != null) { musicSlider.value = 1f; musicVolume = musicSlider.value;}
 
         AudioEvents.RaisePlayMusic(gameMusic);
 
         isMusicMuted = false;
         isSFXMuted = false;
-
-        musicVolume = musicSlider.value;
-        sfxVolume = soundSlider.value;
     }
 
     public void PlayButtonClick()

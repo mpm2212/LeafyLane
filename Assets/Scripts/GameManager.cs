@@ -35,10 +35,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (fulfilledMeadowRequirements)
-        {
-            HandleRemoveClouds(meadowClouds);
-        }
 
     }
 
@@ -69,5 +65,16 @@ public class GameManager : MonoBehaviour
     void HandleRemoveClouds(GameObject cloudsToRemove)
     {
         Destroy(cloudsToRemove);
+    }
+
+    public void setMeadowRequirements(bool meadowRequirements)
+    {
+        fulfilledMeadowRequirements = meadowRequirements;
+        if (fulfilledMeadowRequirements)
+        {
+            GameEvents.RaiseRemoveClouds(meadowClouds);
+            GameCanvasController.Instance.ShowRegionUnlocked("A region to the west has been unlocked...");
+
+        }
     }
 }

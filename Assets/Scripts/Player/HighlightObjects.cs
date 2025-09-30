@@ -15,6 +15,8 @@ public class HighlightObjects : MonoBehaviour
     [SerializeField] private int checkRange = 2;
 
     [SerializeField] LayerMask pickupMask;
+    Collider2D[] nearbyItems;
+    GameObject newHighlighted;
 
     void Start()
     {
@@ -23,14 +25,18 @@ public class HighlightObjects : MonoBehaviour
 
     void Update()
     {
+        //GetNearbyItems();
         HighlightNearbyItems();
     }
 
-    private void HighlightNearbyItems()
+    void GetNearbyItems()
     {
-        Collider2D[] nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
-        GameObject newHighlighted = null;
+        nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
+    }
 
+    void HighlightNearbyItems()
+    {
+        nearbyItems = Physics2D.OverlapCircleAll(transform.position, checkRange, pickupMask);
         float closestDistance = Mathf.Infinity;
         foreach(Collider2D itemCollider in nearbyItems ){
             item = itemCollider.gameObject;
@@ -69,6 +75,7 @@ public class HighlightObjects : MonoBehaviour
         if(flashRoutine != null)
         {
             StopCoroutine(flashRoutine);
+            sr.color = originalColor;
             flashRoutine = null;
         }
         sr.color = originalColor;
